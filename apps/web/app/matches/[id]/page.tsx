@@ -7,8 +7,9 @@ import { PredictionForm } from "@/components/PredictionForm";
 import { TeamBadge } from "@/components/TeamBadge";
 import { WinProbabilityTimeline } from "@/components/WinProbabilityTimeline";
 
-export default async function MatchDetailPage({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
+export default async function MatchDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: rawId } = await params;
+  const id = Number(rawId);
   const [match, prediction, live, players, teams] = await Promise.all([
     api.match(id),
     api.prediction(id),

@@ -21,6 +21,10 @@ async function getJson<T>(path: string, fallback: T): Promise<T> {
   }
 }
 
+function validId(id: number): boolean {
+  return Number.isInteger(id) && id > 0;
+}
+
 export function formatOsloTime(value: string): string {
   return new Intl.DateTimeFormat("nb-NO", {
     dateStyle: "medium",
@@ -50,11 +54,18 @@ export const api = {
     ]
   }),
   matches: () => getJson<Match[]>("/matches", matches),
-  match: (id: number) => getJson<Match>(`/matches/${id}`, matches.find((match) => match.id === id) ?? matches[0]),
+  match: (id: number) => getJson<Match>(`/matches/${validId(id) ? id : matches[0].id}`, matches.find((match) => match.id === id) ?? matches[0]),
   teams: () => getJson<Team[]>("/teams", teams),
-  team: (id: number) => getJson<Team & { players?: Player[] }>(`/teams/${id}`, { ...teams.find((team) => team.id === id)!, players: players.filter((player) => player.team_id === id) }),
+  team: (id: number) => {
+    const fallbackTeam = teams.find((team) => team.id === id) ?? teams[0];
+    const safeId = validId(id) ? id : fallbackTeam.id;
+    return getJson<Team & { players?: Player[] }>(`/teams/${safeId}`, {
+      ...fallbackTeam,
+      players: players.filter((player) => player.team_id === fallbackTeam.id)
+    });
+  },
   players: () => getJson<Player[]>("/players", players),
-  player: (id: number) => getJson<Player>(`/players/${id}`, players.find((player) => player.id === id) ?? players[0]),
+  player: (id: number) => getJson<Player>(`/players/${validId(id) ? id : players[0].id}`, players.find((player) => player.id === id) ?? players[0]),
   predictions: () => getJson<UserPrediction[]>("/predictions", []),
   prediction: (id: number) => getJson<ModelPrediction>(`/matches/${id}/prediction`, { ...prediction, match_id: id }),
   live: (id: number) => getJson<{ current: LiveSnapshot; timeline: LiveSnapshot[]; what_changed: ProbabilityEvent[] }>(`/matches/${id}/live-probability`, { current: liveTimeline[liveTimeline.length - 1], timeline: liveTimeline, what_changed: whatChanged }),

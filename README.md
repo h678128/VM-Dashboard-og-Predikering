@@ -4,6 +4,8 @@
 ![Lint](https://img.shields.io/badge/lint-ruff%20%2F%20eslint-d5a021)
 ![Bygg](https://img.shields.io/badge/bygg-docker%20%2F%20vercel-0f5d4f)
 
+**Live demo:** [https://vm-dashboard-og-predikering.vercel.app](https://vm-dashboard-og-predikering.vercel.app)
+
 Et fullstack VM-prosjekt for kampoversikt, prediksjoner, historisk innsikt og modellforklaringer. Løsningen er laget med norske brukere i tankene: kamptidspunkt vises i `Europe/Oslo`, og sendinger lenkes bare til offisielle norske aktører som NRK, NRK TV, TV 2, TV 2 Play, TV 2 Direkte og TV 2 Sport 1.
 
 Første versjon kjører på seedet/mock-data, slik at prosjektet fungerer uten betalte API-er. Arkitekturen er samtidig klargjort for ekte datakilder som FIFA-resultater, Fjelstul World Cup Database, World Football Elo Ratings, FIFA-rangeringer, World Bank, StatsBomb Open Data og live-leverandører som API-Football.

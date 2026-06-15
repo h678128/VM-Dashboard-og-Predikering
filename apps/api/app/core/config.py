@@ -16,6 +16,7 @@ class Settings(BaseSettings):  # type: ignore[misc, valid-type]
     live_data_provider: str = "seeded"
     live_poll_interval_seconds: int = 30
     allowed_broadcaster_hosts: str = "nrk.no,tv.nrk.no,tv2.no,play.tv2.no"
+    allowed_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
 
     if SettingsConfigDict:
         model_config = SettingsConfigDict(env_file=".env", extra="ignore")
@@ -30,6 +31,7 @@ class Settings(BaseSettings):  # type: ignore[misc, valid-type]
                 "live_data_provider": self.live_data_provider,
                 "live_poll_interval_seconds": self.live_poll_interval_seconds,
                 "allowed_broadcaster_hosts": self.allowed_broadcaster_hosts,
+                "allowed_origins": self.allowed_origins,
             }.items():
                 setattr(self, key, values.get(key, os.getenv(key.upper(), default)))
         else:
@@ -38,6 +40,18 @@ class Settings(BaseSettings):  # type: ignore[misc, valid-type]
     @property
     def broadcaster_hosts(self) -> set[str]:
         return {host.strip().lower() for host in self.allowed_broadcaster_hosts.split(",") if host}
+
+    @property
+    def cors_origins(self) -> list[str]:
+        return [origin.strip() for origin in self.allowed_origins.split(",") if origin.strip()]
+
+    @property
+    def sqlalchemy_database_url(self) -> str:
+        if self.database_url.startswith("postgres://"):
+            return self.database_url.replace("postgres://", "postgresql+psycopg://", 1)
+        if self.database_url.startswith("postgresql://"):
+            return self.database_url.replace("postgresql://", "postgresql+psycopg://", 1)
+        return self.database_url
 
 
 @lru_cache

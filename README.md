@@ -2,11 +2,21 @@
 
 ![Tester](https://img.shields.io/badge/tester-pytest-2f6f91)
 ![Lint](https://img.shields.io/badge/lint-ruff%20%2F%20eslint-d5a021)
-![Bygg](https://img.shields.io/badge/bygg-docker%20compose-0f5d4f)
+![Bygg](https://img.shields.io/badge/bygg-docker%20%2F%20vercel-0f5d4f)
 
 Et fullstack VM-prosjekt for kampoversikt, prediksjoner, historisk innsikt og modellforklaringer. Løsningen er laget med norske brukere i tankene: kamptidspunkt vises i `Europe/Oslo`, og sendinger lenkes bare til offisielle norske aktører som NRK, NRK TV, TV 2, TV 2 Play, TV 2 Direkte og TV 2 Sport 1.
 
 Første versjon kjører på seedet/mock-data, slik at prosjektet fungerer uten betalte API-er. Arkitekturen er samtidig klargjort for ekte datakilder som FIFA-resultater, Fjelstul World Cup Database, World Football Elo Ratings, FIFA-rangeringer, World Bank, StatsBomb Open Data og live-leverandører som API-Football.
+
+## Deploy
+
+Prosjektet har ekte deploy-oppsett for:
+
+- Frontend på Vercel fra `apps/web`
+- API på Render fra `apps/api`
+- PostgreSQL og Redis på Render via `render.yaml`
+
+Se [docs/deploy.md](docs/deploy.md) for trinnvis oppsett, miljøvariabler og kontrollkommandoer.
 
 ## Skjermbilder
 
@@ -22,7 +32,7 @@ Første versjon kjører på seedet/mock-data, slik at prosjektet fungerer uten b
 - Datamodell for lag, spillere, kamper, hendelser, lagoppstillinger, sendinger, brukerprediksjoner, modellprediksjoner og sannsynlighetshendelser.
 - Modelllogikk som skiller mellom deterministiske sannsynligheter og tilfeldighet i Monte Carlo-simuleringer.
 - Norsk produktfokus: Oslo-tid, offisielle norske TV-lenker og ingen ulovlige streams.
-- Deploy-hensyn: produksjons-Dockerfile, lokale demo-secrets, rate-/input-grenser og auditert frontend-avhengighetstre.
+- Deploy-hensyn: produksjons-Dockerfile, CORS-konfigurasjon, lokale demo-secrets, rate-/input-grenser og auditert frontend-avhengighetstre.
 
 ## Arkitektur
 
@@ -44,7 +54,7 @@ data/
   -> Rådata, prosesserte data og seed-data
 
 PostgreSQL + Redis
-  -> Klargjort i docker-compose for lokal utvikling
+  -> Klargjort i docker-compose for lokal utvikling og Render for deploy
 ```
 
 Se også:
@@ -88,7 +98,7 @@ Se også:
 
 ## Kom i gang lokalt
 
-### Backend
+Backend:
 
 ```bash
 cd apps/api
@@ -100,7 +110,7 @@ uvicorn app.main:app --reload
 
 API-dokumentasjon: [http://localhost:8000/docs](http://localhost:8000/docs)
 
-### Frontend
+Frontend:
 
 ```bash
 cd apps/web
@@ -110,7 +120,7 @@ npm run dev
 
 App: [http://localhost:3000](http://localhost:3000)
 
-### Docker Compose
+Docker Compose:
 
 ```bash
 docker compose up --build

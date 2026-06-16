@@ -2,6 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "installCommand": "npm ci",
-  "buildCommand": "npm run build"
+  "buildCommand": "npm run build",
+  "env": {
+    "NEXT_PUBLIC_API_BASE_URL": "https://vm-dashboard-api.onrender.com"
+  }
 }
-

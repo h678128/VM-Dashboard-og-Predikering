@@ -4,7 +4,7 @@
 
 :root {
   color-scheme: light;
-  background: #f3f5f1;
+  background: #f7f6f2;
   color: #17211f;
 }
 
@@ -16,8 +16,8 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(243, 245, 241, 1) 420px),
-    #f3f5f1;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 246, 242, 1) 360px),
+    #f7f6f2;
   color: #17211f;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
@@ -28,17 +28,25 @@ a {
 }
 
 .focus-ring:focus-visible {
-  outline: 3px solid rgba(47, 111, 145, 0.45);
+  outline: 3px solid rgba(47, 111, 145, 0.42);
   outline-offset: 2px;
 }
 
 @layer components {
+  .panel {
+    @apply rounded-lg border border-ink/10 bg-white shadow-[0_10px_30px_rgba(23,33,31,0.055)];
+  }
+
+  .panel-muted {
+    @apply rounded-lg border border-ink/10 bg-[#fbfaf7];
+  }
+
   .surface {
-    @apply rounded-lg border border-ink/10 bg-white shadow-[0_12px_36px_rgba(23,33,31,0.07)];
+    @apply panel;
   }
 
   .surface-muted {
-    @apply rounded-lg border border-ink/10 bg-frost shadow-sm;
+    @apply panel-muted;
   }
 
   .eyebrow {
@@ -46,15 +54,15 @@ a {
   }
 
   .metric-tile {
-    @apply rounded-lg border border-ink/10 bg-white p-4 shadow-[0_10px_26px_rgba(23,33,31,0.05)];
+    @apply rounded-lg border border-ink/10 bg-white p-4 shadow-sm;
   }
 
   .primary-action {
-    @apply focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-ink px-4 py-3 font-semibold text-white shadow-sm transition hover:bg-pine;
+    @apply focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-pine px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-ink;
   }
 
   .secondary-action {
-    @apply focus-ring inline-flex items-center justify-center gap-2 rounded-md border border-ink/15 bg-white px-4 py-3 font-semibold text-ink transition hover:border-fjord hover:text-fjord;
+    @apply focus-ring inline-flex items-center justify-center gap-2 rounded-md border border-ink/15 bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-fjord hover:text-fjord;
   }
 
   .field {

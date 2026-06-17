@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
-  background: #eef1ed;
-  color: #17211f;
+  color-scheme: dark;
+  background: #0a1020;
+  color: #f7f9ff;
 }
 
 * {
@@ -17,12 +17,9 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(238, 241, 237, 1) 380px),
-    linear-gradient(90deg, rgba(23, 33, 31, 0.045) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(23, 33, 31, 0.035) 1px, transparent 1px),
-    #eef1ed;
-  background-size: auto, 36px 36px, 36px 36px, auto;
-  color: #17211f;
+    radial-gradient(circle at 20% 0%, rgba(85, 216, 95, 0.1), transparent 28%),
+    linear-gradient(135deg, #0f1115 0%, #11151b 48%, #0f1115 100%);
+  color: #f7f9ff;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
@@ -32,19 +29,19 @@ a {
 }
 
 .focus-ring:focus-visible {
-  outline: 3px solid rgba(47, 111, 145, 0.42);
+  outline: 3px solid rgba(85, 216, 95, 0.44);
   outline-offset: 2px;
 }
 
 @layer components {
   .panel,
   .surface {
-    @apply min-w-0 w-full rounded-lg border border-ink/10 bg-white shadow-[0_14px_42px_rgba(23,33,31,0.07)];
+    @apply min-w-0 w-full rounded-lg border border-white/10 bg-card text-white shadow-[0_20px_70px_rgba(0,0,0,0.2)];
   }
 
   .panel-muted,
   .surface-muted {
-    @apply rounded-lg border border-ink/10 bg-frost shadow-sm;
+    @apply rounded-lg border border-white/10 bg-white/5 text-white shadow-sm;
   }
 
   .section-head {
@@ -52,15 +49,15 @@ a {
   }
 
   .eyebrow {
-    @apply text-xs font-bold uppercase tracking-[0.14em] text-fjord;
+    @apply text-xs font-bold uppercase tracking-[0.14em] text-white/60;
   }
 
   .muted-copy {
-    @apply text-sm leading-6 text-ink/60;
+    @apply text-sm leading-6 text-white/60;
   }
 
   .metric-tile {
-    @apply rounded-lg border border-ink/10 bg-white p-4 shadow-[0_12px_28px_rgba(23,33,31,0.06)];
+    @apply rounded-lg border border-white/10 bg-card p-4 shadow-[0_18px_44px_rgba(0,0,0,0.18)];
   }
 
   .chip {
@@ -68,20 +65,98 @@ a {
   }
 
   .primary-action {
-    @apply focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-pine px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-ink;
+    @apply focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-mint px-4 py-2.5 text-sm font-bold text-night shadow-sm transition hover:bg-white;
   }
 
   .secondary-action {
-    @apply focus-ring inline-flex items-center justify-center gap-2 rounded-md border border-ink/15 bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-fjord hover:text-fjord;
+    @apply focus-ring inline-flex items-center justify-center gap-2 rounded-md border border-white/10 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white/80 transition hover:border-mint/70 hover:text-white;
   }
 
   .field {
-    @apply mt-1 w-full rounded-md border border-ink/15 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-fjord focus:ring-2 focus:ring-fjord/20;
+    @apply mt-1 w-full rounded-md border border-white/10 bg-night/60 px-3 py-2 text-sm text-white shadow-sm outline-none transition placeholder:text-white/40 focus:border-mint focus:ring-2 focus:ring-mint/20;
   }
 
   .data-row {
-    @apply rounded-md bg-frost px-3 py-2 text-sm;
+    @apply rounded-md bg-white/10 px-3 py-2 text-sm;
   }
+
+  .dashboard-card {
+    @apply rounded-lg border border-white/10 bg-card p-5 text-white shadow-[0_18px_50px_rgba(0,0,0,0.18)];
+  }
+
+  .soft-card {
+    @apply rounded-md border border-white/10 bg-white/10;
+  }
+
+  .dark-scrollbar {
+    scrollbar-color: rgba(255,255,255,0.22) transparent;
+  }
+}
+
+.panel .bg-white,
+.surface .bg-white,
+.dashboard-card .bg-white {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.panel .bg-frost,
+.surface .bg-frost,
+.dashboard-card .bg-frost {
+  background-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+.panel .text-ink,
+.surface .text-ink,
+.dashboard-card .text-ink {
+  color: #f7f9ff !important;
+}
+
+.panel .text-ink\/70,
+.surface .text-ink\/70,
+.dashboard-card .text-ink\/70 {
+  color: rgba(247, 249, 255, 0.7) !important;
+}
+
+.panel .text-ink\/65,
+.surface .text-ink\/65,
+.dashboard-card .text-ink\/65,
+.panel .text-ink\/64,
+.surface .text-ink\/64,
+.dashboard-card .text-ink\/64,
+.panel .text-ink\/60,
+.surface .text-ink\/60,
+.dashboard-card .text-ink\/60 {
+  color: rgba(247, 249, 255, 0.62) !important;
+}
+
+.panel .text-ink\/55,
+.surface .text-ink\/55,
+.dashboard-card .text-ink\/55,
+.panel .text-ink\/50,
+.surface .text-ink\/50,
+.dashboard-card .text-ink\/50,
+.panel .text-ink\/40,
+.surface .text-ink\/40,
+.dashboard-card .text-ink\/40,
+.panel .text-ink\/35,
+.surface .text-ink\/35,
+.dashboard-card .text-ink\/35 {
+  color: rgba(247, 249, 255, 0.48) !important;
+}
+
+.panel .border-ink\/10,
+.surface .border-ink\/10,
+.dashboard-card .border-ink\/10,
+.panel .border-ink\/15,
+.surface .border-ink\/15,
+.dashboard-card .border-ink\/15,
+.panel .border-ink\/20,
+.surface .border-ink\/20,
+.dashboard-card .border-ink\/20,
+.panel .border-ink\/25,
+.surface .border-ink\/25,
+.dashboard-card .border-ink\/25 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 @media (max-width: 640px) {

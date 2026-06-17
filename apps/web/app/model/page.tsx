@@ -68,12 +68,12 @@ export default async function ModelPage({ searchParams }: { searchParams?: Promi
                   <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink/40">{model.version}</p>
                   <h2 className="mt-1 text-lg font-bold">{model.name}</h2>
                 </div>
-                <span className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-bold ${isActive ? "bg-pine/10 text-pine" : "bg-ink/10 text-ink/55"}`}>
+                <span className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-bold ${isActive ? "bg-pine/10 text-pine" : "bg-ink/10 text-ink/50"}`}>
                   {isActive ? <CheckCircle2 size={14} /> : <Lock size={14} />}
                   {isActive ? "Aktiv" : "Kommer"}
                 </span>
               </div>
-              <p className="mt-3 text-sm leading-6 text-ink/64">{model.description}</p>
+              <p className="mt-3 text-sm leading-6 text-ink/60">{model.description}</p>
             </Link>
           );
         })}
@@ -164,7 +164,7 @@ export default async function ModelPage({ searchParams }: { searchParams?: Promi
 
         <div className="grid gap-4 md:grid-cols-3">
           {["Kalibreringsgraf", "Forvekslingsmatrise", "SHAP-forklaring"].map((label) => (
-            <div key={label} className="grid min-h-[180px] place-items-center rounded-lg border border-dashed border-ink/25 bg-white text-center text-sm font-semibold text-ink/55">
+            <div key={label} className="grid min-h-[180px] place-items-center rounded-lg border border-dashed border-ink/25 bg-white text-center text-sm font-semibold text-ink/50">
               {label}
             </div>
           ))}

@@ -7,11 +7,11 @@ import { TeamBadge } from "./TeamBadge";
 
 export function MatchCard({ match }: { match: Match }) {
   const isLive = match.status === "live";
-  const statusClassName = isLive ? "bg-coral/10 text-coral" : "bg-fjord/10 text-fjord";
+  const statusClassName = isLive ? "bg-coral/15 text-coral" : "bg-mint/10 text-mint";
 
   return (
-    <Link className="focus-ring group block h-full rounded-lg border border-ink/10 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-fjord/35 hover:shadow-[0_18px_48px_rgba(23,33,31,0.11)]" href={`/matches/${match.id}`}>
-      <div className="mb-5 flex items-center justify-between gap-3 text-sm text-ink/60">
+    <Link className="focus-ring group block h-full rounded-lg border border-white/10 bg-white/10 p-4 text-white transition hover:-translate-y-0.5 hover:border-mint/40 hover:bg-white/15" href={`/matches/${match.id}`}>
+      <div className="mb-5 flex items-center justify-between gap-3 text-sm text-white/60">
         <span className="font-semibold">
           {matchStageLabel(match.stage)}
           {match.group_name ? ` - Gruppe ${match.group_name}` : ""}
@@ -22,20 +22,20 @@ export function MatchCard({ match }: { match: Match }) {
       </div>
 
       <div className="space-y-2">
-        <div className="flex items-center justify-between gap-3 rounded-md bg-frost px-3 py-2">
-          <TeamBadge linked={false} team={match.home_team} />
+        <div className="flex items-center justify-between gap-3 rounded-md bg-night/30 px-3 py-2">
+          <TeamBadge inverted linked={false} team={match.home_team} />
           <strong className="text-lg">{match.home_score ?? "-"}</strong>
         </div>
-        <div className="flex items-center justify-between gap-3 rounded-md bg-frost px-3 py-2">
-          <TeamBadge linked={false} team={match.away_team} />
+        <div className="flex items-center justify-between gap-3 rounded-md bg-night/30 px-3 py-2">
+          <TeamBadge inverted linked={false} team={match.away_team} />
           <strong className="text-lg">{match.away_score ?? "-"}</strong>
         </div>
       </div>
 
-      <div className="mt-5 flex items-start gap-2 rounded-md bg-frost p-3 text-sm text-ink/70">
-        <CalendarClock className="mt-0.5 shrink-0 text-fjord" size={17} />
+      <div className="mt-5 flex items-start gap-2 rounded-md bg-night/30 p-3 text-sm text-white/60">
+        <CalendarClock className="mt-0.5 shrink-0 text-mint" size={17} />
         <span>
-          <strong className="block text-ink">{formatOsloTime(match.kickoff_at)}</strong>
+          <strong className="block text-white">{formatOsloTime(match.kickoff_at)}</strong>
           {match.stadium}, {match.city}
         </span>
       </div>

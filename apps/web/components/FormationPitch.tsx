@@ -14,7 +14,7 @@ function FormationRows({ formation }: { formation: string }) {
   const rows = formations[formation];
   if (!rows) {
     return (
-      <div className="grid min-h-[220px] place-items-center rounded-md bg-white/12 p-4 text-center text-sm font-semibold text-white">
+      <div className="grid min-h-[220px] place-items-center rounded-md bg-white/10 p-4 text-center text-sm font-semibold text-white">
         Formasjonen {formation} er ikke støttet i visningen ennå.
       </div>
     );
@@ -22,7 +22,7 @@ function FormationRows({ formation }: { formation: string }) {
 
   return (
     <div className="relative grid min-h-[320px] gap-3 rounded-lg border border-white/60 bg-[linear-gradient(135deg,#0f5d4f,#2f6f91)] p-4 shadow-inner">
-      <div className="pointer-events-none absolute inset-4 rounded-md border border-white/45" />
+      <div className="pointer-events-none absolute inset-4 rounded-md border border-white/40" />
       <div className="pointer-events-none absolute left-4 right-4 top-1/2 border-t border-white/35" />
       {rows.map((count, rowIndex) => (
         <div key={`${formation}-${rowIndex}`} className="relative z-10 flex items-center justify-around gap-2">

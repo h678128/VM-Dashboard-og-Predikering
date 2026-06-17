@@ -7,7 +7,7 @@ export function PlayerProfileTable({ players }: { players: Player[] }) {
     .slice(0, 8);
 
   return (
-    <section className="surface p-4">
+    <section className="surface p-5">
       <div className="mb-4">
         <p className="eyebrow">Seed-data</p>
         <h2 className="text-lg font-semibold">Spillerprofiler</h2>
@@ -16,7 +16,7 @@ export function PlayerProfileTable({ players }: { players: Player[] }) {
       <div className="space-y-2">
         {rankedPlayers.map((player, index) => (
           <div key={player.id} className="grid grid-cols-[34px_minmax(0,1fr)_64px] items-center gap-3 rounded-md bg-frost px-3 py-2 text-sm">
-            <span className="grid size-7 place-items-center rounded-sm bg-white font-bold text-ink/70 shadow-sm">{index + 1}</span>
+            <span className="grid size-7 place-items-center rounded-sm bg-mint/10 font-bold text-mint shadow-sm">{index + 1}</span>
             <span className="truncate font-medium">{player.name}</span>
             <strong className="text-right">{player.rating}</strong>
           </div>
@@ -28,7 +28,7 @@ export function PlayerProfileTable({ players }: { players: Player[] }) {
 
 export function TeamLeaderboard({ teams }: { teams: Team[] }) {
   return (
-    <section className="surface p-4">
+    <section className="surface p-5">
       <div className="mb-4">
         <p className="eyebrow">Modellfelt</p>
         <h2 className="text-lg font-semibold">Lagstyrke</h2>
@@ -37,7 +37,7 @@ export function TeamLeaderboard({ teams }: { teams: Team[] }) {
         {teams.slice(0, 8).map((team) => (
           <div key={team.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-md bg-frost px-3 py-2 text-sm">
             <TeamBadge compact team={team} />
-            <div className="text-right">
+            <div className="text-right text-white">
               <span className="block text-xs text-ink/50">FIFA {team.fifa_ranking}</span>
               <strong>{team.elo_rating}</strong>
             </div>
@@ -50,7 +50,7 @@ export function TeamLeaderboard({ teams }: { teams: Team[] }) {
 
 export function LiveTopScorerTable({ scorers }: { scorers: TopScorerStanding[] }) {
   return (
-    <section className="surface p-4">
+    <section className="surface p-5">
       <div className="mb-4">
         <p className="eyebrow">Live data</p>
         <h2 className="text-lg font-semibold">Toppscorere</h2>
@@ -60,7 +60,7 @@ export function LiveTopScorerTable({ scorers }: { scorers: TopScorerStanding[] }
         <div className="space-y-2">
           {scorers.slice(0, 8).map((item, index) => (
             <div key={item.player_id} className="grid grid-cols-[34px_minmax(0,1fr)_58px] items-center gap-3 rounded-md bg-frost px-3 py-2 text-sm">
-              <span className="grid size-7 place-items-center rounded-sm bg-white font-bold text-ink/70 shadow-sm">{index + 1}</span>
+              <span className="grid size-7 place-items-center rounded-sm bg-mint/10 font-bold text-mint shadow-sm">{index + 1}</span>
               <span className="min-w-0">
                 <span className="block truncate font-medium">{item.player.name}</span>
                 <span className="text-xs text-ink/50">{item.team?.fifa_code ?? "Ukjent lag"}</span>
@@ -70,7 +70,7 @@ export function LiveTopScorerTable({ scorers }: { scorers: TopScorerStanding[] }
           ))}
         </div>
       ) : (
-        <div className="rounded-md border border-dashed border-ink/20 bg-frost p-4 text-sm leading-6 text-ink/60">
+        <div className="rounded-md border border-dashed border-white/20 bg-white/10 p-4 text-sm leading-6 text-white/60">
           Ingen mål er registrert i kampdata ennå. Når live-/resultatdata kobles på, oppdateres listen her.
         </div>
       )}
@@ -80,7 +80,7 @@ export function LiveTopScorerTable({ scorers }: { scorers: TopScorerStanding[] }
 
 export function TopScorerPredictionTable({ predictions }: { predictions: TopScorerPrediction[] }) {
   return (
-    <section className="surface p-4">
+    <section className="surface p-5">
       <div className="mb-4">
         <p className="eyebrow">Modell</p>
         <h2 className="text-lg font-semibold">Predikert toppscorer</h2>
@@ -92,15 +92,15 @@ export function TopScorerPredictionTable({ predictions }: { predictions: TopScor
           return (
             <div key={item.player_id} className="space-y-1">
               <div className="grid grid-cols-[34px_minmax(0,1fr)_52px] items-center gap-3 text-sm">
-                <span className="grid size-7 place-items-center rounded-sm bg-frost font-bold text-ink/70">{index + 1}</span>
+                <span className="grid size-7 place-items-center rounded-sm bg-mint/10 font-bold text-mint">{index + 1}</span>
                 <span className="min-w-0">
                   <span className="block truncate font-medium">{item.player.name}</span>
                   <span className="text-xs text-ink/50">{item.team.fifa_code} - {item.expected_goals} forv. mål</span>
                 </span>
                 <strong className="text-right">{probability}%</strong>
               </div>
-              <div className="ml-[46px] h-2 rounded-sm bg-ink/10">
-                <div className="h-2 rounded-sm bg-pine" style={{ width: `${Math.max(probability, 2)}%` }} />
+              <div className="ml-[46px] h-2 rounded-sm bg-white/10">
+                <div className="h-2 rounded-sm bg-mint" style={{ width: `${Math.max(probability, 2)}%` }} />
               </div>
             </div>
           );

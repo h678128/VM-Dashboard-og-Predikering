@@ -11,7 +11,7 @@ type TeamBadgeProps = {
 };
 
 export function TeamBadge({ team, compact = false, linked = true, inverted = false }: TeamBadgeProps) {
-  const codeClassName = inverted ? "text-xs text-white/60" : "text-xs text-ink/55";
+  const codeClassName = inverted ? "text-xs text-white/60" : "text-xs text-white/50";
   const content = (
     <>
       {team.flag_url ? (
@@ -33,7 +33,7 @@ export function TeamBadge({ team, compact = false, linked = true, inverted = fal
   }
 
   return (
-    <Link className="focus-ring inline-flex min-w-0 max-w-full items-center gap-2 overflow-hidden rounded-md px-1 py-1 transition hover:bg-frost" href={`/teams/${team.id}`}>
+    <Link className="focus-ring inline-flex min-w-0 max-w-full items-center gap-2 overflow-hidden rounded-md px-1 py-1 transition hover:bg-white/10" href={`/teams/${team.id}`}>
       {content}
     </Link>
   );

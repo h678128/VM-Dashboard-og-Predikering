@@ -34,6 +34,31 @@ a {
 }
 
 @layer components {
+  .live-ticker {
+    @apply sticky top-0 z-50 flex h-8 overflow-hidden border-b border-mint/20 bg-mint text-xs font-semibold text-night shadow-[0_10px_30px_rgba(0,0,0,0.18)];
+  }
+
+  .live-ticker-label {
+    @apply flex h-full shrink-0 items-center gap-2 bg-night px-4 text-[11px] font-black uppercase tracking-[0.12em] text-mint;
+  }
+
+  .live-ticker-scroll {
+    @apply flex min-w-0 flex-1 items-center overflow-hidden;
+  }
+
+  .live-ticker-track {
+    @apply flex min-w-max items-center gap-12 whitespace-nowrap pl-8;
+    animation: live-ticker-scroll 38s linear infinite;
+  }
+
+  .live-ticker-item {
+    @apply inline-flex items-center gap-2;
+  }
+
+  .live-dot {
+    @apply size-2 rounded-full bg-night;
+  }
+
   .panel,
   .surface {
     @apply min-w-0 w-full rounded-lg border border-white/10 bg-card text-white shadow-[0_20px_70px_rgba(0,0,0,0.2)];
@@ -90,6 +115,21 @@ a {
 
   .dark-scrollbar {
     scrollbar-color: rgba(255,255,255,0.22) transparent;
+  }
+}
+
+@keyframes live-ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-ticker-track {
+    animation: none;
   }
 }
 

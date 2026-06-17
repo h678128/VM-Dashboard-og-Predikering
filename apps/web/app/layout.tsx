@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Activity } from "lucide-react";
 import "./globals.css";
 import { AppLogo, AppNav } from "@/components/AppNav";
+import { LiveTicker } from "@/components/LiveTicker";
 import { APP_NAME } from "@/lib/labels";
 
 export const metadata: Metadata = {
@@ -36,7 +37,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </aside>
 
           <div className="min-w-0">
-            <header className="sticky top-0 z-40 border-b border-white/10 bg-night/96 text-white shadow-sm backdrop-blur lg:hidden">
+            <LiveTicker />
+            <header className="sticky top-8 z-40 border-b border-white/10 bg-night/96 text-white shadow-sm backdrop-blur lg:hidden">
               <div className="flex items-center gap-3 px-4 py-3">
                 <Link className="focus-ring mr-auto inline-flex items-center gap-2 rounded-md font-bold" href="/">
                   <AppLogo compact />

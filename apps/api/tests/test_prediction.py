@@ -1,6 +1,7 @@
 from app.services.live_probability import probability_events, update_live_probability
 from app.services.prediction import predict_match, score_prediction
 from app.services.seed_data import seed
+from app.services.standings import calculate_group_standings
 from app.api.routes import (
     create_prediction,
     data_status,
@@ -187,6 +188,27 @@ def test_live_top_scorers_only_use_registered_goal_events():
         ("Bradley Barcola", 1),
         ("Marcus Rashford", 1),
         ("Marko Arnautovic", 1),
+    ]
+
+
+def test_group_standings_are_calculated_from_finished_matches():
+    data = seed()
+    groups = calculate_group_standings(data["teams"], data["matches"])
+    group_i = next(group for group in groups if group["group_name"] == "I")
+    group_k = next(group for group in groups if group["group_name"] == "K")
+
+    assert [
+        (row["team"]["name"], row["points"], row["goal_difference"])
+        for row in group_i["standings"]
+    ] == [
+        ("Norway", 3, 3),
+        ("France", 3, 2),
+        ("Senegal", 0, -2),
+        ("Iraq", 0, -3),
+    ]
+    assert [(row["team"]["name"], row["points"]) for row in group_k["standings"][:2]] == [
+        ("Portugal", 1),
+        ("DR Congo", 1),
     ]
 
 

@@ -1,7 +1,7 @@
 import { ArrowRight, CalendarDays, CircleDollarSign, Goal, Radio, ShieldCheck, Trophy, UsersRound, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { DataFlowStatus } from "@/components/DataFlowStatus";
-import { LiveTopScorerTable, TeamLeaderboard, TopScorerPredictionTable } from "@/components/Leaderboards";
+import { GroupStandingsTable, LiveTopScorerTable, TopScorerPredictionTable } from "@/components/Leaderboards";
 import { MatchCard } from "@/components/MatchCard";
 import { TeamBadge } from "@/components/TeamBadge";
 import { api, formatOsloTime } from "@/lib/api";
@@ -40,13 +40,14 @@ function StatCard({ label, value, helper, Icon }: { label: string; value: string
 }
 
 export default async function HomePage() {
-  const [matches, teams, tournament, dataStatus, topScorers, topScorerPredictions] = await Promise.all([
+  const [matches, teams, tournament, dataStatus, topScorers, topScorerPredictions, groupStandings] = await Promise.all([
     api.matches(),
     api.teams(),
     api.tournament(),
     api.dataStatus(),
     api.topScorers(),
-    api.topScorerPredictions()
+    api.topScorerPredictions(),
+    api.groupStandings()
   ]);
 
   const liveMatch = matches.find((match) => match.status === "live") ?? null;
@@ -223,7 +224,7 @@ export default async function HomePage() {
       <section className="grid gap-5 lg:grid-cols-3">
         <LiveTopScorerTable scorers={topScorers} />
         <TopScorerPredictionTable predictions={topScorerPredictions} />
-        <TeamLeaderboard teams={teams} />
+        <GroupStandingsTable groups={groupStandings} limit={1} />
       </section>
 
       <section className="grid gap-5 xl:grid-cols-[420px_minmax(0,1fr)]">

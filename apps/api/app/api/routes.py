@@ -23,6 +23,7 @@ from app.services.prediction import FEATURES, predict_match, score_prediction
 from app.services.rate_limit import enforce_rate_limit
 from app.services.seed_data import find_one, seed
 from app.services.simulation import simulate_match, simulate_tournament
+from app.services.standings import calculate_group_standings
 
 router = APIRouter()
 USER_PREDICTIONS: list[dict] = []
@@ -451,6 +452,12 @@ def top_scorer_prediction() -> list[dict]:
 @router.get("/leaderboards/teams")
 def team_leaderboard() -> list[dict]:
     return sorted(seed()["teams"], key=lambda team: (team["fifa_ranking"], -team["elo_rating"]))
+
+
+@router.get("/leaderboards/groups")
+def group_standings() -> list[dict]:
+    data = seed()
+    return calculate_group_standings(data["teams"], data["matches"])
 
 
 @router.get("/model/features")

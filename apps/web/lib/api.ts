@@ -1,8 +1,10 @@
 import { API_BASE_URL } from "./config";
 import { matchStatusLabel, teamName } from "./labels";
 import { lineups, liveTimeline, matches, modelLab, players, prediction, teams, topScorerPredictions, topScorers, whatChanged } from "./seed";
+import { calculateGroupStandings } from "./standings";
 import type {
   DataStatus,
+  GroupStandings,
   LiveSnapshot,
   Lineup,
   LiveTickerPayload,
@@ -96,6 +98,7 @@ export const api = {
   players: () => getJson<Player[]>("/players", players),
   player: (id: number) => getJson<Player>(`/players/${validId(id) ? id : players[0].id}`, players.find((player) => player.id === id) ?? players[0]),
   topScorers: () => getJson<TopScorerStanding[]>("/leaderboards/top-scorers", topScorers),
+  groupStandings: () => getJson<GroupStandings[]>("/leaderboards/groups", calculateGroupStandings(teams, matches)),
   topScorerPredictions: () => getJson<TopScorerPrediction[]>("/model/top-scorer-prediction", topScorerPredictions),
   predictions: () => getJson<UserPrediction[]>("/predictions", []),
   lineups: (id: number) => getJson<Lineup[]>(`/matches/${id}/lineups`, lineups.filter((lineup) => lineup.match_id === id)),

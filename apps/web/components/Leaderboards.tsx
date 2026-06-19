@@ -1,4 +1,4 @@
-import type { Player, Team, TopScorerPrediction, TopScorerStanding } from "@/lib/types";
+import type { GroupStandings, Player, TopScorerPrediction, TopScorerStanding } from "@/lib/types";
 import { TeamBadge } from "./TeamBadge";
 
 export function PlayerProfileTable({ players }: { players: Player[] }) {
@@ -26,20 +26,56 @@ export function PlayerProfileTable({ players }: { players: Player[] }) {
   );
 }
 
-export function TeamLeaderboard({ teams }: { teams: Team[] }) {
+export function GroupStandingsTable({ groups, limit }: { groups: GroupStandings[]; limit?: number }) {
+  const visibleGroups = typeof limit === "number" ? groups.slice(0, limit) : groups;
+
   return (
     <section className="surface p-5">
       <div className="mb-4">
-        <p className="eyebrow">Modellfelt</p>
-        <h2 className="text-lg font-semibold">Lagstyrke</h2>
+        <p className="eyebrow">Gruppespill</p>
+        <h2 className="text-lg font-semibold">Gruppetabeller</h2>
+        <p className="mt-1 text-sm text-ink/60">Poeng beregnes fra bekreftede ferdigspilte kamper.</p>
       </div>
-      <div className="space-y-2">
-        {teams.slice(0, 8).map((team) => (
-          <div key={team.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-md bg-frost px-3 py-2 text-sm">
-            <TeamBadge compact team={team} />
-            <div className="text-right text-white">
-              <span className="block text-xs text-ink/50">FIFA {team.fifa_ranking}</span>
-              <strong>{team.elo_rating}</strong>
+      <div className="space-y-4">
+        {visibleGroups.map((group) => (
+          <div key={group.group_name} className="overflow-hidden rounded-lg border border-white/10 bg-white/5">
+            <div className="flex items-center justify-between border-b border-white/10 px-3 py-2">
+              <strong className="text-sm">Gruppe {group.group_name}</strong>
+              <span className="text-xs text-white/45">P · MF · Mål</span>
+            </div>
+            <div className="min-w-0 overflow-x-auto">
+              <table className="w-full min-w-[430px] text-sm">
+                <thead className="text-xs uppercase text-white/45">
+                  <tr className="[&>th]:px-2 [&>th]:py-2">
+                    <th className="w-8 text-left">#</th>
+                    <th className="text-left">Lag</th>
+                    <th className="text-right">K</th>
+                    <th className="text-right">S</th>
+                    <th className="text-right">U</th>
+                    <th className="text-right">T</th>
+                    <th className="text-right">M</th>
+                    <th className="text-right">MF</th>
+                    <th className="text-right">P</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {group.standings.map((row) => (
+                    <tr key={row.team_id} className="border-t border-white/10 [&>td]:px-2 [&>td]:py-2">
+                      <td className="font-bold text-white/55">{row.position}</td>
+                      <td>
+                        <TeamBadge compact inverted team={row.team} />
+                      </td>
+                      <td className="text-right text-white/70">{row.played}</td>
+                      <td className="text-right text-white/70">{row.won}</td>
+                      <td className="text-right text-white/70">{row.drawn}</td>
+                      <td className="text-right text-white/70">{row.lost}</td>
+                      <td className="text-right text-white/70">{row.goals_for}-{row.goals_against}</td>
+                      <td className="text-right text-white/70">{row.goal_difference > 0 ? `+${row.goal_difference}` : row.goal_difference}</td>
+                      <td className="text-right font-black text-mint">{row.points}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         ))}

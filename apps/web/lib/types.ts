@@ -173,6 +173,25 @@ export type TopScorerPrediction = {
   signals: string[];
 };
 
+export type GroupStandingRow = {
+  position: number;
+  team_id: number;
+  team: Team;
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  goals_for: number;
+  goals_against: number;
+  goal_difference: number;
+  points: number;
+};
+
+export type GroupStandings = {
+  group_name: string;
+  standings: GroupStandingRow[];
+};
+
 export type LiveTickerPayload = {
   mode: "live" | "scheduled";
   timezone: "Europe/Oslo";

@@ -224,17 +224,17 @@ a {
 }
 
 [data-theme="light"] .live-ticker {
-  background-color: #55d85f;
-  color: #17211f;
+  background-color: #1f8f4a;
+  color: #ffffff;
 }
 
 [data-theme="light"] .live-ticker-label {
   background-color: #f8fbf9;
-  color: #0f5d4f;
+  color: #0c6842;
 }
 
 [data-theme="light"] .live-dot {
-  background-color: #0f5d4f;
+  background-color: #ffffff;
 }
 
 [data-theme="light"] aside,
@@ -280,6 +280,43 @@ a {
 [data-theme="light"] .bg-white\/10,
 [data-theme="light"] .bg-white\/15 {
   background-color: rgba(23, 33, 31, 0.055) !important;
+}
+
+[data-theme="light"] .text-mint,
+[data-theme="light"] .hover\:text-mint:hover {
+  color: #0c6842 !important;
+}
+
+[data-theme="light"] .bg-mint,
+[data-theme="light"] .hover\:bg-mint:hover {
+  background-color: #138247 !important;
+}
+
+[data-theme="light"] .bg-mint\/10,
+[data-theme="light"] .bg-mint\/15,
+[data-theme="light"] .bg-mint\/20 {
+  background-color: rgba(19, 130, 71, 0.14) !important;
+}
+
+[data-theme="light"] .border-mint,
+[data-theme="light"] .border-mint\/20,
+[data-theme="light"] .border-mint\/40,
+[data-theme="light"] .border-mint\/70,
+[data-theme="light"] .hover\:border-mint\/70:hover {
+  border-color: rgba(12, 104, 66, 0.55) !important;
+}
+
+[data-theme="light"] .shadow-mint\/20 {
+  --tw-shadow-color: rgba(12, 104, 66, 0.24) !important;
+}
+
+[data-theme="light"] .primary-action {
+  background-color: #138247 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="light"] .primary-action:hover {
+  background-color: #0c6842 !important;
 }
 
 [data-theme="light"] .text-white,

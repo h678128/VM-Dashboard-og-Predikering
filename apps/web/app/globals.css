@@ -35,7 +35,7 @@ a {
 
 @layer components {
   .live-ticker {
-    @apply sticky top-0 z-50 flex h-8 overflow-hidden border-b border-mint/20 bg-mint text-xs font-semibold text-night shadow-[0_10px_30px_rgba(0,0,0,0.18)];
+    @apply sticky top-0 z-50 flex h-8 overflow-hidden bg-mint text-xs font-semibold text-night shadow-[0_10px_30px_rgba(0,0,0,0.18)];
   }
 
   .live-ticker-label {
@@ -43,12 +43,12 @@ a {
   }
 
   .live-ticker-scroll {
-    @apply flex min-w-0 flex-1 items-center overflow-hidden;
+    @apply flex min-w-0 flex-1 items-center overflow-hidden border-b border-mint/20;
   }
 
   .live-ticker-track {
     @apply flex min-w-max items-center gap-12 whitespace-nowrap pl-8;
-    animation: live-ticker-scroll 44s linear infinite;
+    animation: live-ticker-scroll 54s linear infinite;
   }
 
   .live-ticker-item {

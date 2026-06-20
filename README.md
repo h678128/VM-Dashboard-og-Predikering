@@ -20,11 +20,6 @@ Prosjektet har ekte deploy-oppsett for:
 
 Se [docs/deploy.md](docs/deploy.md) for trinnvis oppsett, miljøvariabler og kontrollkommandoer.
 
-## Skjermbilder
-
-- `docs/screenshots/home.png` kommer
-- `docs/screenshots/match-detail.png` kommer
-- `docs/screenshots/model-lab.png` kommer
 
 ## Hva prosjektet viser
 

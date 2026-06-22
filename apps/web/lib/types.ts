@@ -101,6 +101,8 @@ export type LiveSnapshot = {
   away_xg: number;
   home_shots_on_target: number;
   away_shots_on_target: number;
+  home_possession?: number | null;
+  away_possession?: number | null;
   home_dangerous_attacks: number;
   away_dangerous_attacks: number;
   home_win_probability: number;

@@ -323,6 +323,8 @@ def live_probability(match_id: int) -> dict:
             "away_xg": 0.0,
             "home_shots_on_target": 0,
             "away_shots_on_target": 0,
+            "home_possession": None,
+            "away_possession": None,
             "home_dangerous_attacks": 0,
             "away_dangerous_attacks": 0,
             "home_win_probability": prediction["home_win_probability"],

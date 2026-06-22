@@ -8,6 +8,7 @@ from app.api.routes import (
     create_prediction,
     data_status,
     list_predictions,
+    live_probability,
     match_events,
     matches as route_matches,
     model_lab,
@@ -248,4 +249,12 @@ def test_match_events_are_sorted_and_enriched():
     assert events[0]["player"]["name"] == "Erling Haaland"
     assert events[0]["team"]["name"] == "Norway"
     assert events[-1]["player"] is None
+
+
+def test_live_probability_marks_missing_possession_as_unavailable():
+    payload = live_probability(3)
+
+    assert payload["timeline"] == []
+    assert payload["current"]["home_possession"] is None
+    assert payload["current"]["away_possession"] is None
 

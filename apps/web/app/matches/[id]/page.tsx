@@ -6,6 +6,7 @@ import { FormationPitch } from "@/components/FormationPitch";
 import { MatchEventTimeline } from "@/components/MatchEventTimeline";
 import { ModelExplanationCard } from "@/components/ModelExplanationCard";
 import { PredictionForm } from "@/components/PredictionForm";
+import { PossessionComparison } from "@/components/PossessionComparison";
 import { TeamBadge } from "@/components/TeamBadge";
 import { WinProbabilityTimeline } from "@/components/WinProbabilityTimeline";
 
@@ -75,6 +76,11 @@ export default async function MatchDetailPage({ params }: { params: Promise<{ id
               </div>
             </div>
             <div className="grid grid-cols-2 gap-2 text-sm">
+              <PossessionComparison
+                awayPossession={live.current.away_possession}
+                homePossession={live.current.home_possession}
+                match={match}
+              />
               <div className="rounded-md bg-frost p-3">xG hjemme <strong className="block">{liveStat(live.current.home_xg)}</strong></div>
               <div className="rounded-md bg-frost p-3">xG borte <strong className="block">{liveStat(live.current.away_xg)}</strong></div>
               <div className="rounded-md bg-frost p-3">Skudd på mål hjemme <strong className="block">{liveStat(live.current.home_shots_on_target)}</strong></div>

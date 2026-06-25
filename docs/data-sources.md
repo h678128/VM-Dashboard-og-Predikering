@@ -16,6 +16,17 @@ Backend er strukturert for ekte dataleverandører, men krever dem ikke for offen
 
 Konfigurerte leverandørresponser caches før normalisering. Hvis en leverandør feiler, kan API-et fortsatt servere importert processed-data, seedet visning eller siste cachede payload.
 
+## Oppdatere kampdata gratis
+
+Kampimporten kan bruke en URL fra `FIFA_SCHEDULE_URL`, en midlertidig `--source-url`, eller en lokal JSON-fil med gratis/manuelt verifiserte resultater.
+
+```bash
+worldcup-ingest import-matches --source-file data/processed/matches.json
+worldcup-ingest import-matches --source-url https://example.com/world-cup-matches.json
+```
+
+Importen skriver original payload til `data/raw/fifa_schedule/latest.json` og normalisert appdata til `data/processed/matches.json`. Frontend og API bruker deretter processed-data før seed fallback.
+
 ## Miljøvariabler
 
 | Variabel | Bruk |

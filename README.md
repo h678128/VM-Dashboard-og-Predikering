@@ -63,6 +63,15 @@ PostgreSQL + Redis
   Klargjort for lokal utvikling og Render-deploy.
 ```
 
+Kampdata kan oppdateres gratis med:
+
+```bash
+cd apps/api
+worldcup-ingest import-matches --source-file ../../data/processed/matches.json
+```
+
+Kommandoen kan også bruke en JSON-URL via `--source-url` eller `FIFA_SCHEDULE_URL`, skriver raw-cache til `data/raw` og oppdaterer `data/processed/matches.json`.
+
 Mer detaljert dokumentasjon ligger her:
 
 - [docs/architecture.md](docs/architecture.md)

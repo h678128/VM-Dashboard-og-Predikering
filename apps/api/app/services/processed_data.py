@@ -36,6 +36,12 @@ def load_processed_matches() -> tuple[list[dict[str, Any]], dict[str, Any] | Non
     return normalized, metadata
 
 
+def write_processed_matches(payload: dict[str, Any], path: Path = MATCHES_FILE) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+    return path
+
+
 def apply_processed_data(data: dict[str, list[dict[str, Any]]]) -> dict[str, list[dict[str, Any]]]:
     processed_matches, metadata = load_processed_matches()
     if not processed_matches:

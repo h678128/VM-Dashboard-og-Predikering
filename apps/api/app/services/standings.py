@@ -7,6 +7,11 @@ def calculate_group_standings(teams: list[dict], matches: list[dict]) -> list[di
     teams_by_id = {team["id"]: team for team in teams}
     groups: dict[str, set[int]] = {}
 
+    for team in teams:
+        group_name = team.get("group_name")
+        if group_name:
+            groups.setdefault(group_name, set()).add(team["id"])
+
     for match in matches:
         group_name = match.get("group_name")
         if not group_name:

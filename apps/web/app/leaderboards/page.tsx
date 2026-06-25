@@ -15,7 +15,7 @@ export default async function LeaderboardsPage() {
         <p className="eyebrow">Oversikt</p>
         <h1 className="mt-1 text-3xl font-bold">Tabeller</h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-ink/60">
-          Gruppene beregnes fra bekreftede resultater. Toppscorerlisten teller faktiske mål fra kampdata.
+          Alle grupper vises. Poeng beregnes bare fra registrerte, bekreftede kampdata.
         </p>
       </section>
 

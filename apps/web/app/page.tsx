@@ -63,6 +63,7 @@ export default async function HomePage() {
         .slice(0, 7)
         .map((team, index) => ({ team_id: team.id, team, winner: Math.max(0.04, 0.18 - index * 0.018) }));
   const favorite = tournamentTeams[0];
+  const featuredGroupStandings = groupStandings.filter((group) => group.group_name === "I");
   const confederations = teams.reduce<Record<string, number>>((acc, team) => {
     acc[team.confederation] = (acc[team.confederation] ?? 0) + 1;
     return acc;
@@ -224,7 +225,7 @@ export default async function HomePage() {
       <section className="grid gap-5 lg:grid-cols-3">
         <LiveTopScorerTable scorers={topScorers} />
         <TopScorerPredictionTable predictions={topScorerPredictions} />
-        <GroupStandingsTable groups={groupStandings} limit={1} />
+        <GroupStandingsTable groups={featuredGroupStandings.length ? featuredGroupStandings : groupStandings} limit={1} />
       </section>
 
       <section className="grid gap-5 xl:grid-cols-[420px_minmax(0,1fr)]">

@@ -1,5 +1,6 @@
 export type Team = {
   id: number;
+  group_name?: string;
   name: string;
   fifa_code: string;
   confederation: string;

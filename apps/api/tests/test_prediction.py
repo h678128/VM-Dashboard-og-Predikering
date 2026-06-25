@@ -117,9 +117,12 @@ def test_live_probability_explains_significant_change():
 
 
 def test_seed_schedule_uses_verified_group_results_only():
-    matches = seed()["matches"]
+    data = seed()
+    matches = data["matches"]
 
     assert matches
+    assert len(data["teams"]) == 48
+    assert {team["group_name"] for team in data["teams"]} == set("ABCDEFGHIJKL")
     assert {match["group_name"] for match in matches} == {"I", "J", "K", "L"}
     assert all(match["stage"] == "Group stage" for match in matches)
     finished = [
@@ -224,9 +227,19 @@ def test_live_top_scorers_only_use_registered_goal_events():
 def test_group_standings_are_calculated_from_finished_matches():
     data = seed()
     groups = calculate_group_standings(data["teams"], data["matches"])
+    group_names = [group["group_name"] for group in groups]
+    group_a = next(group for group in groups if group["group_name"] == "A")
     group_i = next(group for group in groups if group["group_name"] == "I")
     group_k = next(group for group in groups if group["group_name"] == "K")
 
+    assert group_names == list("ABCDEFGHIJKL")
+    assert [row["team"]["name"] for row in group_a["standings"]] == [
+        "Mexico",
+        "South Korea",
+        "Czech Republic",
+        "South Africa",
+    ]
+    assert all(row["played"] == 0 for row in group_a["standings"])
     assert [
         (row["team"]["name"], row["points"], row["goal_difference"])
         for row in group_i["standings"]

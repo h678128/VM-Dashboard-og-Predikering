@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 class TeamOut(BaseModel):
     id: int
+    group_name: str | None = None
     name: str
     fifa_code: str
     confederation: str

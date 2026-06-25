@@ -4,6 +4,13 @@ export function calculateGroupStandings(teams: Team[], matches: Match[]): GroupS
   const teamsById = new Map(teams.map((team) => [team.id, team]));
   const groupTeams = new Map<string, Set<number>>();
 
+  for (const team of teams) {
+    if (!team.group_name) continue;
+    const ids = groupTeams.get(team.group_name) ?? new Set<number>();
+    ids.add(team.id);
+    groupTeams.set(team.group_name, ids);
+  }
+
   for (const match of matches) {
     if (!match.group_name) continue;
     const ids = groupTeams.get(match.group_name) ?? new Set<number>();

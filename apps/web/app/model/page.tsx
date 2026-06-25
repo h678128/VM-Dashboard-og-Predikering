@@ -21,7 +21,7 @@ type LabModel = {
 };
 
 function formatMetric(value: unknown): string {
-  return typeof value === "number" ? value.toFixed(2) : "Kommer";
+  return typeof value === "number" ? value.toFixed(2) : "Ikke beregnet";
 }
 
 export default async function ModelPage({ searchParams }: { searchParams?: Promise<{ modell?: string }> }) {

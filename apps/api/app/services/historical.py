@@ -9,15 +9,15 @@ HISTORICAL_INSIGHTS = {
     ],
     "red_card_impact": {
         "average_win_probability_drop": 0.18,
-        "note": "Direction depends on score state and minute; value is a seeded placeholder for model UX.",
+        "note": "Effekten avhenger av kampminutt, stilling og hvilket lag som får kortet. Verdien er seedet til visningsbruk.",
     },
     "knockout_match_trends": {
         "extra_time_frequency": 0.18,
         "penalty_shootout_frequency": 0.10,
-        "first_goal_importance": "Higher than group stage because draw state has no shared point value.",
+        "first_goal_importance": "Høyere enn i gruppespill fordi uavgjort ikke gir delt poengverdi i sluttspill.",
     },
     "penalty_shootout_history": {
-        "sample_size_note": "Wire Fjelstul and FIFA historical data before treating as analytical truth.",
+        "sample_size_note": "Koble på Fjelstul og FIFA-historikk før dette behandles som analytisk fasit.",
         "favorite_win_rate": 0.54,
     },
     "underdog_win_frequency": 0.24,

@@ -3,7 +3,7 @@ import type { DataStatus } from "@/lib/types";
 
 export function DataFlowStatus({ status }: { status: DataStatus }) {
   const isFallback = status.mode === "seed-fallback";
-  const label = isFallback ? "Seed fallback" : status.mode === "seeded" ? "Seedet API" : "Ekstern datakilde";
+  const label = isFallback ? "Seedet visning" : status.mode === "seeded" ? "Seedet API" : "Ekstern datakilde";
   const counts = [
     ["Lag", status.counts.teams],
     ["Spillere", status.counts.players],
@@ -24,7 +24,7 @@ export function DataFlowStatus({ status }: { status: DataStatus }) {
             <p className="eyebrow">Datastatus</p>
             <h2 className="mt-1 text-xl font-bold">Dataflyt</h2>
             <p className="mt-2 text-sm leading-6 text-ink/60">
-              API først, seed fallback når eksterne datakilder ikke er koblet på.
+              API først, seedet visning når eksterne datakilder ikke er koblet på.
             </p>
             <div className="mt-3 flex flex-wrap gap-2 text-sm">
               <span className={`chip ${isFallback ? "bg-gold/20 text-white" : "bg-mint/10 text-mint"}`}>{label}</span>

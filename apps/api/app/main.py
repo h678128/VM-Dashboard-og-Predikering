@@ -28,6 +28,6 @@ app.include_router(router)
 def create_demo_tables() -> None:
     try:
         Base.metadata.create_all(bind=engine)
-    except Exception as exc:  # pragma: no cover - API can still serve seed fallback without DB.
+    except Exception as exc:  # pragma: no cover - API can still serve seeded data without DB.
         print(f"Database startup skipped: {exc}")
 

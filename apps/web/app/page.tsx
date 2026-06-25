@@ -233,14 +233,14 @@ export default async function HomePage() {
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="eyebrow">Datagrunnlag</p>
-              <h2 className="mt-1 text-xl font-black uppercase tracking-[0.05em]">Gratis først, live senere</h2>
+              <h2 className="mt-1 text-xl font-black uppercase tracking-[0.05em]">Seedet nå, live senere</h2>
             </div>
             <CircleDollarSign className="text-mint" size={24} />
           </div>
           <div className="mt-5 grid gap-3 md:grid-cols-3">
             <div className="soft-card p-4">
-              <strong className="block">Seed fallback</strong>
-              <p className="mt-2 text-sm leading-6 text-white/60">Appen fungerer uten betalte API-er og viser tydelig når data er demo.</p>
+              <strong className="block">Seedet visning</strong>
+              <p className="mt-2 text-sm leading-6 text-white/60">Appen fungerer uten betalte API-er og merker tydelig når data ikke kommer fra live-API.</p>
             </div>
             <div className="soft-card p-4">
               <strong className="block">Offisielle lenker</strong>

@@ -14,7 +14,7 @@ export default async function PlayersPage() {
         <p className="eyebrow">Spillerbase</p>
         <h1 className="mt-1 text-3xl font-black uppercase tracking-[0.05em]">Spillere</h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-ink/60">
-          Seedet spillerfelt for demoen. Live toppscorer og modellert toppscorer ligger fortsatt under tabeller.
+          Seedet spillerfelt som holder appen visningsklar uten betalte API-er. Live toppscorer og modellert toppscorer ligger under tabeller.
         </p>
       </section>
 

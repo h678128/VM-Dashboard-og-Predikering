@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./config";
+import { API_BASE_URL, HAS_API_BASE_URL } from "./config";
 import { matchStatusLabel, teamName } from "./labels";
 import { events, lineups, liveTimeline, matches, modelLab, players, prediction, teams, topScorerPredictions, topScorers, whatChanged } from "./seed";
 import { calculateGroupStandings } from "./standings";
@@ -20,6 +20,7 @@ import type {
 } from "./types";
 
 async function getJson<T>(path: string, fallback: T): Promise<T> {
+  if (!HAS_API_BASE_URL) return fallback;
   try {
     const response = await fetch(`${API_BASE_URL}${path}`, { next: { revalidate: 30 } });
     if (!response.ok) return fallback;
@@ -81,8 +82,8 @@ export const api = {
       user_predictions: 0
     },
     data_flow: [
-      "Frontend bruker seed fallback fordi API-et ikke svarte.",
-      "Sett NEXT_PUBLIC_API_BASE_URL for å bruke deployet API.",
+      "Frontend bruker seedet visningsdata fordi NEXT_PUBLIC_API_BASE_URL ikke er satt.",
+      "Når API-et er deployet, settes NEXT_PUBLIC_API_BASE_URL i Vercel.",
       "API-et eksponerer /data/sources for ekte datakilder og raw-cache status.",
       "Når API-et svarer, går brukerprediksjoner til POST /predictions."
     ]

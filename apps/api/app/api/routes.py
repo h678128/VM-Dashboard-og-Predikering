@@ -405,7 +405,7 @@ def list_predictions(
         Query(
             ge=1,
             le=MAX_PUBLIC_PREDICTION_LIMIT,
-            description="Return only the latest public demo predictions.",
+            description="Return only the latest public predictions.",
         ),
     ] = DEFAULT_PUBLIC_PREDICTION_LIMIT,
     db: Session | None = Depends(get_db),
@@ -557,7 +557,7 @@ def historical_insights() -> dict:
 def tournament_simulation(
     iterations: Annotated[
         int,
-        Query(ge=1, le=10_000, description="Monte Carlo iterations, capped for public demo safety."),
+        Query(ge=1, le=10_000, description="Monte Carlo iterations, capped for public safety."),
     ] = 2_000,
 ) -> dict:
     return simulate_tournament(seed()["teams"], iterations=iterations)
@@ -568,7 +568,7 @@ def match_simulation(
     match_id: int,
     iterations: Annotated[
         int,
-        Query(ge=1, le=50_000, description="Monte Carlo iterations, capped for public demo safety."),
+        Query(ge=1, le=50_000, description="Monte Carlo iterations, capped for public safety."),
     ] = 10_000,
 ) -> dict:
     prediction = model_prediction(match_id)

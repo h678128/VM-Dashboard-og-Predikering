@@ -31,6 +31,7 @@ class PlayerOut(BaseModel):
     club: str | None = None
     caps: int | None = None
     goals: int | None = None
+    tournament_goals: int = 0
     rating: float | None = None
 
 

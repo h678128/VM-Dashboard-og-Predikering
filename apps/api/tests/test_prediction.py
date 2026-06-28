@@ -180,6 +180,16 @@ def test_data_status_exposes_counts_and_prediction_flow():
     assert list_predictions(limit=5)[-1]["id"] == created["id"]
 
 
+def test_players_separate_international_and_tournament_goals():
+    mbappe = next(item for item in seed()["players"] if item["name"] == "Kylian Mbappe")
+    haaland = next(item for item in seed()["players"] if item["name"] == "Erling Haaland")
+
+    assert mbappe["goals"] == 52
+    assert mbappe["tournament_goals"] == 2
+    assert haaland["goals"] == 38
+    assert haaland["tournament_goals"] == 2
+
+
 def test_model_lab_exposes_selectable_model_levels():
     lab = model_lab()
 

@@ -42,7 +42,7 @@ const mkPlayer = (
   caps: number,
   goals: number,
   rating: number
-): Player => ({ id, team_id, name, position, shirt_number, age, club, caps, goals, rating });
+): Player => ({ id, team_id, name, position, shirt_number, age, club, caps, goals, tournament_goals: 0, rating });
 
 export const teams: Team[] = [
   mkTeam(1, "I", "Norway", "NOR", "UEFA", "no", 29, 1528.0, 1810, 87962, 5500000, 0.76, 0.18),
@@ -248,6 +248,12 @@ export const events: MatchEvent[] = [
   mkEvent(23, 18, 13, 16, 52, "Jude Bellingham sendte England foran igjen."),
   mkEvent(24, 18, 13, 17, 85, "Marcus Rashford punkterte kampen.")
 ];
+
+for (const event of events) {
+  if (event.event_type !== "goal" || event.player_id === null) continue;
+  const scorer = players.find((player) => player.id === event.player_id);
+  if (scorer) scorer.tournament_goals += 1;
+}
 
 export const prediction: ModelPrediction = {
   match_id: 1,

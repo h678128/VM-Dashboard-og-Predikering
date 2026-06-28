@@ -313,6 +313,13 @@ def seed() -> dict[str, list[dict]]:
             "model_versions": MODEL_VERSIONS,
         }
     )
+    tournament_goals: dict[int, int] = {}
+    for event_item in base["events"]:
+        player_id = event_item.get("player_id")
+        if event_item.get("event_type") == "goal" and player_id is not None:
+            tournament_goals[player_id] = tournament_goals.get(player_id, 0) + 1
+    for player_item in base["players"]:
+        player_item["tournament_goals"] = tournament_goals.get(player_item["id"], 0)
     return apply_processed_data(base)
 
 

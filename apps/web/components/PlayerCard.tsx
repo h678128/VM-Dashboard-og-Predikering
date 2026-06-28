@@ -11,9 +11,10 @@ export function PlayerCard({ player }: { player: Player }) {
         </div>
         <span className="rounded-md bg-ink px-2 py-1 text-sm font-bold text-white">{player.rating}</span>
       </div>
-      <div className="mt-4 grid grid-cols-3 gap-2 text-sm">
-        <div className="rounded-md bg-frost p-3"><span className="block text-ink/50">Kamper</span><strong>{player.caps}</strong></div>
-        <div className="rounded-md bg-frost p-3"><span className="block text-ink/50">Mål</span><strong>{player.goals}</strong></div>
+      <div className="mt-4 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
+        <div className="rounded-md bg-frost p-3"><span className="block text-ink/50">Landskamper</span><strong>{player.caps}</strong></div>
+        <div className="rounded-md bg-frost p-3"><span className="block text-ink/50">Landslagsmål</span><strong>{player.goals}</strong></div>
+        <div className="rounded-md bg-frost p-3"><span className="block text-ink/50">VM 2026-mål</span><strong>{player.tournament_goals}</strong></div>
         <div className="rounded-md bg-frost p-3"><span className="block text-ink/50">Alder</span><strong>{player.age}</strong></div>
       </div>
     </div>

@@ -25,6 +25,7 @@ export type Player = {
   club: string;
   caps: number;
   goals: number;
+  tournament_goals: number;
   rating: number;
 };
 

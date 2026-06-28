@@ -14,7 +14,7 @@ export default async function PlayersPage() {
         <p className="eyebrow">Spillerbase</p>
         <h1 className="mt-1 text-3xl font-black uppercase tracking-[0.05em]">Spillere</h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-ink/60">
-          Seedet spillerfelt som holder appen visningsklar uten betalte API-er. Live toppscorer og modellert toppscorer ligger under tabeller.
+          Landskamper og landslagsmål viser spillerens totale landslagsstatistikk. VM 2026-mål beregnes separat fra registrerte kamphendelser i turneringen.
         </p>
       </section>
 
@@ -41,9 +41,10 @@ export default async function PlayersPage() {
                 <ArrowRight className="text-white/35 transition group-hover:translate-x-1 group-hover:text-mint" size={18} />
               </div>
 
-              <div className="mt-4 grid grid-cols-3 gap-2 text-sm">
-                <div className="rounded-md bg-white/10 p-3"><span className="block text-white/50">Kamper</span><strong>{player.caps}</strong></div>
-                <div className="rounded-md bg-white/10 p-3"><span className="block text-white/50">Mål</span><strong>{player.goals}</strong></div>
+              <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
+                <div className="rounded-md bg-white/10 p-3"><span className="block text-white/50">Landskamper</span><strong>{player.caps}</strong></div>
+                <div className="rounded-md bg-white/10 p-3"><span className="block text-white/50">Landslagsmål</span><strong>{player.goals}</strong></div>
+                <div className="rounded-md bg-white/10 p-3"><span className="block text-white/50">VM 2026-mål</span><strong>{player.tournament_goals}</strong></div>
                 <div className="rounded-md bg-white/10 p-3"><span className="block text-white/50">Alder</span><strong>{player.age}</strong></div>
               </div>
             </Link>

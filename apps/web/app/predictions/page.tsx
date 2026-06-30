@@ -13,6 +13,7 @@ export default async function PredictionsPage() {
 
   const teamsById = new Map(teams.map((team) => [team.id, team]));
   const latestPredictions = predictions.slice(-5).reverse();
+  const scheduledMatches = matches.filter((match) => match.status === "scheduled");
 
   return (
     <div className="space-y-5">
@@ -25,14 +26,14 @@ export default async function PredictionsPage() {
             <p className="eyebrow">Tipskonkurranse</p>
             <h1 className="mt-1 text-3xl font-bold">Bruker vs modell</h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-ink/60">
-              Legg inn kampresultat, vinner, første målscorer og turneringsvalg. Poengene beregnes av API-et etter kampdata.
+              Velg en kommende kamp og legg inn resultat, første målscorer og turneringsvalg. Tipsfristen stenger ved avspark.
             </p>
           </div>
         </div>
       </section>
 
       <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-        <PredictionForm match={matches[0]} players={players} teams={teams} />
+        <PredictionForm matches={scheduledMatches} players={players} teams={teams} />
         <section className="surface p-4">
           <div className="mb-4">
             <p className="eyebrow">Regler</p>
@@ -71,7 +72,7 @@ export default async function PredictionsPage() {
                   <span>
                     {prediction.predicted_home_score}-{prediction.predicted_away_score} - {winner ? teamName(winner) : "Uavgjort"}
                   </span>
-                  <strong>{prediction.points} poeng</strong>
+                  <strong>{prediction.scoring ? `${prediction.points} poeng` : "Venter på resultat"}</strong>
                 </div>
               );
             })}

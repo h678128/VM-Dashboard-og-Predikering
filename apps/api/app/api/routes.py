@@ -25,7 +25,6 @@ from app.services.prediction import (
     get_model_config,
     model_feature_importance,
     predict_match,
-    score_prediction,
     team_strength,
 )
 from app.services.processed_data import load_processed_player_stats, processed_status
@@ -89,6 +88,74 @@ def append_memory_prediction(prediction_dict: dict) -> dict:
     if len(USER_PREDICTIONS) > PREDICTION_STORE_LIMIT:
         del USER_PREDICTIONS[: len(USER_PREDICTIONS) - PREDICTION_STORE_LIMIT]
     return prediction_dict
+
+
+def utc_datetime(value: datetime | str) -> datetime:
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00")) if isinstance(value, str) else value
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def validate_prediction_submission(
+    prediction: PredictionIn,
+    data: dict,
+    now: datetime | None = None,
+) -> dict:
+    match_item = next(
+        (item for item in data["matches"] if item["id"] == prediction.match_id),
+        None,
+    )
+    if not match_item:
+        raise HTTPException(404, "Kampen finnes ikke.")
+
+    current_time = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    if match_item.get("status") != "scheduled" or utc_datetime(match_item["kickoff_at"]) <= current_time:
+        raise HTTPException(409, "Tipsfristen for denne kampen er passert.")
+
+    home_team_id = match_item["home_team_id"]
+    away_team_id = match_item["away_team_id"]
+    predicted_winner = prediction.predicted_winner_team_id
+    valid_winners = {home_team_id, away_team_id, None}
+    if predicted_winner not in valid_winners:
+        raise HTTPException(422, "Vinneren må være et av lagene i kampen eller uavgjort.")
+
+    if prediction.predicted_home_score > prediction.predicted_away_score:
+        score_winner = home_team_id
+    elif prediction.predicted_away_score > prediction.predicted_home_score:
+        score_winner = away_team_id
+    else:
+        score_winner = None
+    if predicted_winner != score_winner:
+        raise HTTPException(422, "Valgt vinner må samsvare med det oppgitte resultatet.")
+
+    teams_by_id = {team["id"]: team for team in data["teams"]}
+    players_by_id = {player["id"]: player for player in data["players"]}
+    first_scorer_id = prediction.first_goalscorer_player_id
+    if first_scorer_id is not None:
+        first_scorer = players_by_id.get(first_scorer_id)
+        if not first_scorer or first_scorer["team_id"] not in {home_team_id, away_team_id}:
+            raise HTTPException(422, "Første målscorer må tilhøre et av lagene i kampen.")
+        if prediction.predicted_home_score + prediction.predicted_away_score == 0:
+            raise HTTPException(422, "En målløs kamp kan ikke ha en første målscorer.")
+
+    if (
+        prediction.tournament_winner_team_id is not None
+        and prediction.tournament_winner_team_id not in teams_by_id
+    ):
+        raise HTTPException(422, "Turneringsvinneren finnes ikke.")
+    if (
+        prediction.tournament_top_scorer_player_id is not None
+        and prediction.tournament_top_scorer_player_id not in players_by_id
+    ):
+        raise HTTPException(422, "Turneringens toppscorer finnes ikke.")
+
+    for group_name, team_id in (prediction.group_winners_json or {}).items():
+        team = teams_by_id.get(team_id)
+        if not team or team.get("group_name") != group_name:
+            raise HTTPException(422, f"Gruppevinneren for gruppe {group_name} er ugyldig.")
+
+    return match_item
 
 
 def prediction_write_rate_limit(request: Request) -> None:
@@ -175,7 +242,7 @@ def data_status(db: Session | None = Depends(get_db)) -> dict:
             f"{processed['collections'].get('finished_matches', 0)} ferdige.",
             f"{configured_sources} eksterne datakilder er konfigurert, {cached_sources} har raw-cache.",
             "Seed-data brukes som trygg fallback når liveleverandør ikke er koblet på.",
-            "Brukerprediksjoner går fra frontend til POST /predictions og poengsettes i API-et.",
+            "Brukerprediksjoner lagres ved innsending og poengsettes etter verifiserte resultater.",
         ],
     }
 
@@ -384,20 +451,18 @@ async def live_probability_stream(match_id: int):
 @router.post("/predictions", dependencies=[Depends(prediction_write_rate_limit)])
 def create_prediction(prediction: PredictionIn, db: Session | None = Depends(get_db)) -> dict:
     data = seed()
+    validate_prediction_submission(prediction, data)
     prediction_dict = prediction.model_dump()
     prediction_dict["created_at"] = datetime.now(timezone.utc)
-    actual = find_one("matches", prediction.match_id) if prediction.match_id else {}
-    actual = (actual or {}) | {"first_goalscorer_player_id": 1, "tournament_top_scorer_player_id": 3}
-    scoring = score_prediction(prediction_dict, actual)
-    prediction_dict["points"] = scoring["total_points"]
-    prediction_dict["scoring"] = scoring
+    prediction_dict["points"] = 0
+    prediction_dict["scoring"] = None
 
     db_session = usable_db(db)
     if db_session:
         try:
             row = UserPredictionModel(
                 **{key: value for key, value in prediction_dict.items() if key != "scoring"},
-                scoring_json=scoring,
+                scoring_json=None,
             )
             db_session.add(row)
             db_session.commit()

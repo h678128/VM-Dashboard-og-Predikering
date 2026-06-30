@@ -1,5 +1,10 @@
+from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
+import pytest
+from fastapi import HTTPException
+
+import app.api.routes as routes
 from app.services.live_probability import probability_events, update_live_probability
 from app.services.prediction import predict_match, score_prediction
 from app.services.seed_data import seed
@@ -164,20 +169,95 @@ def test_data_status_exposes_counts_and_prediction_flow():
     assert status["is_live_data"] is False
     assert status["counts"]["teams"] == len(seed()["teams"])
 
+    assert "verifiserte resultater" in status["data_flow"][-1]
+
+
+def future_prediction_data() -> tuple[dict, dict]:
+    data = seed()
+    match = data["matches"][0]
+    match["status"] = "scheduled"
+    match["home_score"] = None
+    match["away_score"] = None
+    match["kickoff_at"] = datetime.now(timezone.utc) + timedelta(days=1)
+    return data, match
+
+
+def test_finished_match_rejects_new_prediction():
+    with pytest.raises(HTTPException) as error:
+        create_prediction(
+            PredictionIn(
+                match_id=1,
+                predicted_home_score=1,
+                predicted_away_score=0,
+                predicted_winner_team_id=2,
+            ),
+            db=None,
+        )
+
+    assert error.value.status_code == 409
+    assert "passert" in error.value.detail
+
+
+def test_future_prediction_is_stored_without_points(monkeypatch):
+    USER_PREDICTIONS.clear()
+    data, match = future_prediction_data()
+    monkeypatch.setattr(routes, "seed", lambda: data)
+
     created = create_prediction(
         PredictionIn(
-            match_id=1,
-            predicted_home_score=1,
-            predicted_away_score=0,
-            predicted_winner_team_id=1,
-            first_goalscorer_player_id=1,
+            match_id=match["id"],
+            predicted_home_score=2,
+            predicted_away_score=1,
+            predicted_winner_team_id=match["home_team_id"],
+            first_goalscorer_player_id=3,
             tournament_winner_team_id=2,
             tournament_top_scorer_player_id=3,
-        )
+        ),
+        db=None,
     )
 
-    assert created["points"] > 0
-    assert list_predictions(limit=5)[-1]["id"] == created["id"]
+    assert created["points"] == 0
+    assert created["scoring"] is None
+    assert list_predictions(limit=5, db=None)[-1]["id"] == created["id"]
+
+
+def test_prediction_rejects_player_from_another_match_team(monkeypatch):
+    data, match = future_prediction_data()
+    monkeypatch.setattr(routes, "seed", lambda: data)
+
+    with pytest.raises(HTTPException) as error:
+        create_prediction(
+            PredictionIn(
+                match_id=match["id"],
+                predicted_home_score=1,
+                predicted_away_score=0,
+                predicted_winner_team_id=match["home_team_id"],
+                first_goalscorer_player_id=1,
+            ),
+            db=None,
+        )
+
+    assert error.value.status_code == 422
+    assert "lagene i kampen" in error.value.detail
+
+
+def test_prediction_rejects_winner_that_disagrees_with_score(monkeypatch):
+    data, match = future_prediction_data()
+    monkeypatch.setattr(routes, "seed", lambda: data)
+
+    with pytest.raises(HTTPException) as error:
+        create_prediction(
+            PredictionIn(
+                match_id=match["id"],
+                predicted_home_score=1,
+                predicted_away_score=0,
+                predicted_winner_team_id=match["away_team_id"],
+            ),
+            db=None,
+        )
+
+    assert error.value.status_code == 422
+    assert "samsvare" in error.value.detail
 
 
 def test_players_separate_international_and_tournament_goals():

@@ -182,7 +182,7 @@ export type UserPrediction = {
   scoring?: {
     total_points: number;
     breakdown: Record<string, number>;
-  };
+  } | null;
 };
 
 export type TopScorerStanding = {

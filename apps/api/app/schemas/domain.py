@@ -99,10 +99,10 @@ class BroadcastOut(BaseModel):
 class PredictionIn(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    match_id: int | None = Field(default=None, ge=1)
+    match_id: int = Field(ge=1)
     user_name: str = Field(default="portfolio_guest", min_length=1, max_length=80)
-    predicted_home_score: int | None = Field(default=None, ge=0, le=30)
-    predicted_away_score: int | None = Field(default=None, ge=0, le=30)
+    predicted_home_score: int = Field(ge=0, le=30)
+    predicted_away_score: int = Field(ge=0, le=30)
     predicted_winner_team_id: int | None = Field(default=None, ge=1)
     first_goalscorer_player_id: int | None = Field(default=None, ge=1)
     group_winners_json: dict[str, int] | None = Field(default=None, max_length=16)

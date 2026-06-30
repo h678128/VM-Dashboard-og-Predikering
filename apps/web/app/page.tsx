@@ -6,13 +6,7 @@ import { MatchCard } from "@/components/MatchCard";
 import { TeamBadge } from "@/components/TeamBadge";
 import { api, formatOsloTime } from "@/lib/api";
 import { APP_NAME, matchStageLabel, matchStatusLabel, teamName } from "@/lib/labels";
-import type { Team } from "@/lib/types";
-
-type SimulationTeam = {
-  team_id: number;
-  team: Team;
-  winner: number;
-};
+import type { TournamentSimulationTeam } from "@/lib/types";
 
 function percent(value: number): string {
   return `${Math.round(value * 100)}%`;
@@ -55,13 +49,26 @@ export default async function HomePage() {
   const upcomingMatches = matches.filter((match) => match.id !== featuredMatch.id).slice(0, 4);
   const officialBroadcasts = matches.reduce((count, match) => count + (match.broadcasts?.length ?? 0), 0);
   const goalsScored = matches.reduce((count, match) => count + (match.home_score ?? 0) + (match.away_score ?? 0), 0);
-  const tournamentTeams = Array.isArray((tournament as { teams?: SimulationTeam[] }).teams)
-    ? ((tournament as { teams: SimulationTeam[] }).teams ?? []).slice(0, 7)
+  const tournamentTeams: TournamentSimulationTeam[] = tournament.teams.length
+    ? tournament.teams
+        .slice()
+        .sort((first, second) => second.winner - first.winner)
+        .slice(0, 7)
     : teams
         .slice()
         .sort((first, second) => second.elo_rating - first.elo_rating)
         .slice(0, 7)
-        .map((team, index) => ({ team_id: team.id, team, winner: Math.max(0.04, 0.18 - index * 0.018) }));
+        .map((team, index) => ({
+          team_id: team.id,
+          team,
+          advance_group: 0,
+          round_of_32: 0,
+          round_of_16: 0,
+          quarterfinal: 0,
+          semifinal: 0,
+          final: 0,
+          winner: Math.max(0.04, 0.18 - index * 0.018)
+        }));
   const favorite = tournamentTeams[0];
   const featuredGroupStandings = groupStandings.filter((group) => group.group_name === "I");
   const confederations = teams.reduce<Record<string, number>>((acc, team) => {

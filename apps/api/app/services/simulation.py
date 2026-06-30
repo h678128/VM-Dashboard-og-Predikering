@@ -100,7 +100,7 @@ def simulate_tournament(teams: list[dict[str, Any]], iterations: int = 2_000, se
         "teams": [
             {
                 "team_id": team["id"],
-                "team": team["name"],
+                "team": team,
                 **{stage: round(counters[team["id"]][stage] / iterations, 4) for stage in STAGES},
             }
             for team in teams

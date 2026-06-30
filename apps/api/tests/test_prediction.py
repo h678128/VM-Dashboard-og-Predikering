@@ -8,6 +8,7 @@ import app.api.routes as routes
 from app.services.live_probability import probability_events, update_live_probability
 from app.services.prediction import predict_match, score_prediction
 from app.services.seed_data import seed
+from app.services.simulation import simulate_tournament
 from app.services.standings import calculate_group_standings
 from app.api.routes import (
     create_prediction,
@@ -67,6 +68,17 @@ def test_prediction_points_are_additive():
     assert result["breakdown"]["exact_score"] == 5
     assert result["breakdown"]["correct_first_goalscorer"] == 4
     assert result["breakdown"]["correct_tournament_top_scorer"] == 10
+
+
+def test_tournament_simulation_returns_complete_team_objects():
+    data = seed()
+    result = simulate_tournament(data["teams"], iterations=10)
+    teams_by_id = {team["id"]: team for team in data["teams"]}
+
+    assert result["iterations"] == 10
+    assert len(result["teams"]) == len(data["teams"])
+    assert all(item["team"] == teams_by_id[item["team_id"]] for item in result["teams"])
+    assert all(item["team"]["fifa_code"] for item in result["teams"])
 
 
 def test_live_probability_explains_significant_change():

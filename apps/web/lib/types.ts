@@ -222,6 +222,23 @@ export type GroupStandings = {
   standings: GroupStandingRow[];
 };
 
+export type TournamentSimulationTeam = {
+  team_id: number;
+  team: Team;
+  advance_group: number;
+  round_of_32: number;
+  round_of_16: number;
+  quarterfinal: number;
+  semifinal: number;
+  final: number;
+  winner: number;
+};
+
+export type TournamentSimulation = {
+  iterations: number;
+  teams: TournamentSimulationTeam[];
+};
+
 export type LiveTickerPayload = {
   mode: "live" | "scheduled";
   timezone: "Europe/Oslo";

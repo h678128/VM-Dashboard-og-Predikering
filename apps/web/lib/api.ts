@@ -14,6 +14,7 @@ import type {
   Player,
   ProbabilityEvent,
   Team,
+  TournamentSimulation,
   TopScorerPrediction,
   TopScorerStanding,
   UserPrediction
@@ -120,7 +121,10 @@ export const api = {
   ),
   historical: () => getJson<Record<string, unknown>>("/historical-insights", {}),
   modelLab: () => getJson<Record<string, unknown>>("/model/lab", modelLab),
-  tournament: () => getJson<Record<string, unknown>>("/tournament/simulation", {}),
+  tournament: () => getJson<TournamentSimulation>("/tournament/simulation", {
+    iterations: 0,
+    teams: []
+  }),
   liveTicker: () => getJson<LiveTickerPayload>("/live/ticker", {
     mode: "scheduled",
     timezone: "Europe/Oslo",

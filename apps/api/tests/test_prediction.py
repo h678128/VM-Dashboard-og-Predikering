@@ -72,13 +72,55 @@ def test_prediction_points_are_additive():
 
 def test_tournament_simulation_returns_complete_team_objects():
     data = seed()
-    result = simulate_tournament(data["teams"], iterations=10)
+    result = simulate_tournament(data["teams"], data["matches"], iterations=25)
     teams_by_id = {team["id"]: team for team in data["teams"]}
 
-    assert result["iterations"] == 10
+    assert result["iterations"] == 25
     assert len(result["teams"]) == len(data["teams"])
     assert all(item["team"] == teams_by_id[item["team_id"]] for item in result["teams"])
     assert all(item["team"]["fifa_code"] for item in result["teams"])
+
+
+def test_tournament_simulation_follows_2026_stage_sizes():
+    data = seed()
+    result = simulate_tournament(data["teams"], data["matches"], iterations=25)
+    expected_probability_sums = {
+        "advance_group": 32,
+        "round_of_32": 32,
+        "round_of_16": 16,
+        "quarterfinal": 8,
+        "semifinal": 4,
+        "final": 2,
+        "winner": 1,
+    }
+
+    for stage, expected_sum in expected_probability_sums.items():
+        assert sum(team[stage] for team in result["teams"]) == pytest.approx(expected_sum)
+
+    for team in result["teams"]:
+        stage_probabilities = [
+            team["round_of_32"],
+            team["round_of_16"],
+            team["quarterfinal"],
+            team["semifinal"],
+            team["final"],
+            team["winner"],
+        ]
+        assert stage_probabilities == sorted(stage_probabilities, reverse=True)
+
+    assert {stage: len(matches) for stage, matches in result["example_bracket"].items()} == {
+        "round_of_32": 16,
+        "round_of_16": 8,
+        "quarterfinal": 4,
+        "semifinal": 2,
+        "final": 1,
+    }
+    round_of_32_teams = [
+        team["id"]
+        for match in result["example_bracket"]["round_of_32"]
+        for team in (match["home_team"], match["away_team"])
+    ]
+    assert len(round_of_32_teams) == len(set(round_of_32_teams)) == 32
 
 
 def test_live_probability_explains_significant_change():

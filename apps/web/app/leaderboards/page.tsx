@@ -1,14 +1,16 @@
 import { GroupStandingsTable, LiveTopScorerTable, PlayerProfileTable, TopScorerPredictionTable } from "@/components/Leaderboards";
 import { DataProvenance } from "@/components/DataProvenance";
+import { TournamentBracket } from "@/components/TournamentBracket";
 import { api } from "@/lib/api";
 
 export default async function LeaderboardsPage() {
-  const [players, topScorers, topScorerPredictions, groupStandings, dataStatus] = await Promise.all([
+  const [players, topScorers, topScorerPredictions, groupStandings, dataStatus, tournament] = await Promise.all([
     api.players(),
     api.topScorers(),
     api.topScorerPredictions(),
     api.groupStandings(),
-    api.dataStatus()
+    api.dataStatus(),
+    api.tournament()
   ]);
 
   return (
@@ -25,6 +27,8 @@ export default async function LeaderboardsPage() {
       </section>
 
       <GroupStandingsTable groups={groupStandings} />
+
+      <TournamentBracket simulation={tournament} />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <LiveTopScorerTable scorers={topScorers} />

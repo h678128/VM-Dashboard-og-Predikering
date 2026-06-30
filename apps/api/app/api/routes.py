@@ -729,7 +729,8 @@ def tournament_simulation(
         Query(ge=1, le=10_000, description="Monte Carlo iterations, capped for public safety."),
     ] = 2_000,
 ) -> dict:
-    return simulate_tournament(seed()["teams"], iterations=iterations)
+    data = seed()
+    return simulate_tournament(data["teams"], data["matches"], iterations=iterations)
 
 
 @router.get("/matches/{match_id}/simulation", dependencies=[Depends(simulation_rate_limit)])

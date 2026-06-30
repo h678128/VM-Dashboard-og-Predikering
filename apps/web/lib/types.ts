@@ -234,9 +234,43 @@ export type TournamentSimulationTeam = {
   winner: number;
 };
 
+export type TournamentGroupRow = {
+  team: Team;
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  goals_for: number;
+  goals_against: number;
+  goal_difference: number;
+  points: number;
+};
+
+export type TournamentKnockoutMatch = {
+  match_number: number;
+  stage: "round_of_32" | "round_of_16" | "quarterfinal" | "semifinal" | "final";
+  home_team: Team;
+  away_team: Team;
+  home_score: number;
+  away_score: number;
+  decided_by: "regular_time" | "penalties";
+  winner_team: Team;
+};
+
 export type TournamentSimulation = {
   iterations: number;
+  format: {
+    groups: number;
+    teams_per_group: number;
+    group_matches: number;
+    automatic_qualifiers: number;
+    best_third_placed_qualifiers: number;
+    round_of_32_teams: number;
+  };
   teams: TournamentSimulationTeam[];
+  example_groups: Record<string, TournamentGroupRow[]>;
+  example_bracket: Record<TournamentKnockoutMatch["stage"], TournamentKnockoutMatch[]>;
+  model_notes: string[];
 };
 
 export type LiveTickerPayload = {

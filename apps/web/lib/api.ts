@@ -123,7 +123,24 @@ export const api = {
   modelLab: () => getJson<Record<string, unknown>>("/model/lab", modelLab),
   tournament: () => getJson<TournamentSimulation>("/tournament/simulation", {
     iterations: 0,
-    teams: []
+    format: {
+      groups: 12,
+      teams_per_group: 4,
+      group_matches: 72,
+      automatic_qualifiers: 24,
+      best_third_placed_qualifiers: 8,
+      round_of_32_teams: 32
+    },
+    teams: [],
+    example_groups: {},
+    example_bracket: {
+      round_of_32: [],
+      round_of_16: [],
+      quarterfinal: [],
+      semifinal: [],
+      final: []
+    },
+    model_notes: []
   }),
   liveTicker: () => getJson<LiveTickerPayload>("/live/ticker", {
     mode: "scheduled",

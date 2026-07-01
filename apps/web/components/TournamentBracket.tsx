@@ -6,7 +6,7 @@ type KnockoutStage = Exclude<TournamentKnockoutMatch["stage"], "final">;
 type FlowDirection = "left" | "right" | "none";
 
 const roundLabels: Record<TournamentKnockoutMatch["stage"], string> = {
-  round_of_32: "32-delsfinale",
+  round_of_32: "16-delsfinale",
   round_of_16: "Åttedelsfinale",
   quarterfinal: "Kvartfinale",
   semifinal: "Semifinale",

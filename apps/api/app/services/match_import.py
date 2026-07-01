@@ -51,11 +51,7 @@ def normalize_group(value: Any) -> str | None:
     group_match = re.search(r"group(?: stage)?[ _-]+([A-L])(?:\b|_)", text, re.IGNORECASE)
     if group_match:
         return group_match.group(1).upper()
-    if "_" in text:
-        text = text.split("_")[-1]
-    if " " in text:
-        text = text.split()[-1]
-    return text[-1].upper()
+    return text.upper() if re.fullmatch(r"[A-L]", text, re.IGNORECASE) else None
 
 
 def normalized_team_key(value: Any) -> str:
@@ -315,7 +311,7 @@ def import_matches_payload(
 ) -> Path:
     normalized = normalize_match_payload(payload, teams, seed_matches, source_name, source_url)
     if preserve_existing:
-        existing, _ = load_processed_matches()
+        existing, existing_metadata = load_processed_matches()
         merged = list(existing)
 
         def same_fixture(first: dict[str, Any], second: dict[str, Any]) -> bool:
@@ -323,13 +319,19 @@ def import_matches_payload(
             second_number = second.get("match_number")
             if first_number and second_number:
                 return first_number == second_number
-            return (
+            same_teams = (
                 first.get("home_team_id") is not None
                 and first.get("away_team_id") is not None
                 and first.get("home_team_id") == second.get("home_team_id")
                 and first.get("away_team_id") == second.get("away_team_id")
                 and first.get("stage") == second.get("stage")
             )
+            same_slot = (
+                first.get("stage") == second.get("stage")
+                and str(first.get("kickoff_at")).replace(" ", "T")[:16]
+                == str(second.get("kickoff_at")).replace(" ", "T")[:16]
+            )
+            return same_teams or same_slot
 
         for update in normalized["matches"]:
             existing_index = next(
@@ -339,11 +341,31 @@ def import_matches_payload(
             if existing_index is None:
                 merged.append(update)
             else:
-                merged[existing_index] = {**merged[existing_index], **update}
+                previous = merged[existing_index]
+                combined = {**previous, **update}
+                combined["id"] = previous["id"]
+                combined["match_number"] = update.get("match_number") or previous.get(
+                    "match_number"
+                )
+                if previous.get("status") == "finished" and update.get("status") != "finished":
+                    combined.update(
+                        {
+                            "status": "finished",
+                            "home_score": previous.get("home_score"),
+                            "away_score": previous.get("away_score"),
+                            "home_penalty_score": previous.get("home_penalty_score"),
+                            "away_penalty_score": previous.get("away_penalty_score"),
+                        }
+                    )
+                merged[existing_index] = combined
 
         normalized["matches"] = sorted(merged, key=lambda match: str(match["kickoff_at"]))
         normalized["metadata"]["notes"] = [
             "Leverandøroppdateringer er flettet inn i den komplette terminlisten.",
             "Uavklarte sluttspillplasser beholdes til deltakende lag er kjent.",
         ]
+        if existing_metadata and existing_metadata.get("verification_sources"):
+            normalized["metadata"]["verification_sources"] = existing_metadata[
+                "verification_sources"
+            ]
     return write_processed_matches(normalized, path=output_path) if output_path else write_processed_matches(normalized)

@@ -1,3 +1,4 @@
+import { matchStageLabel, teamName } from "./labels";
 import type { GroupStandings, Match, Team } from "./types";
 
 export function calculateGroupStandings(teams: Team[], matches: Match[]): GroupStandings[] {
@@ -95,4 +96,109 @@ export function calculateGroupStandings(teams: Team[], matches: Match[]): GroupS
 
       return { group_name, standings };
     });
+}
+
+export type TeamTournamentStatus = {
+  kind: "active" | "eliminated" | "champion" | "pending";
+  title: string;
+  detail: string;
+  match?: Match;
+  opponent?: Team;
+};
+
+const eliminationStageTitles: Record<string, string> = {
+  "Round of 32": "Røk ut i 16-delsfinalen",
+  "Round of 16": "Røk ut i åttedelsfinalen",
+  Quarterfinal: "Røk ut i kvartfinalen",
+  "Quarter-final": "Røk ut i kvartfinalen",
+  Semifinal: "Røk ut i semifinalen",
+  "Semi-final": "Røk ut i semifinalen",
+  Final: "Røk ut i finalen"
+};
+
+function opponentFor(match: Match, teamId: number): Team | undefined {
+  return (match.home_team_id === teamId ? match.away_team : match.home_team) ?? undefined;
+}
+
+function teamLost(match: Match, teamId: number): boolean {
+  if (match.status !== "finished" || match.home_score == null || match.away_score == null) return false;
+  const isHome = match.home_team_id === teamId;
+  const teamScore = isHome ? match.home_score : match.away_score;
+  const opponentScore = isHome ? match.away_score : match.home_score;
+  if (teamScore !== opponentScore) return teamScore < opponentScore;
+  const teamPenalties = isHome ? match.home_penalty_score : match.away_penalty_score;
+  const opponentPenalties = isHome ? match.away_penalty_score : match.home_penalty_score;
+  return teamPenalties != null && opponentPenalties != null && teamPenalties < opponentPenalties;
+}
+
+function resultLabel(match: Match, teamId: number): string {
+  const isHome = match.home_team_id === teamId;
+  const teamScore = isHome ? match.home_score : match.away_score;
+  const opponentScore = isHome ? match.away_score : match.home_score;
+  const teamPenalties = isHome ? match.home_penalty_score : match.away_penalty_score;
+  const opponentPenalties = isHome ? match.away_penalty_score : match.home_penalty_score;
+  const regularScore = `${teamScore ?? "-"}–${opponentScore ?? "-"}`;
+  return teamPenalties != null && opponentPenalties != null
+    ? `${regularScore} (${teamPenalties}–${opponentPenalties} på straffer)`
+    : regularScore;
+}
+
+export function getTeamTournamentStatus(teamId: number, matches: Match[]): TeamTournamentStatus {
+  const teamMatches = matches
+    .filter((match) => match.home_team_id === teamId || match.away_team_id === teamId)
+    .sort((first, second) => new Date(first.kickoff_at).getTime() - new Date(second.kickoff_at).getTime());
+  const knockoutLoss = [...teamMatches]
+    .reverse()
+    .find((match) => !match.group_name && match.stage !== "Match for third place" && teamLost(match, teamId));
+
+  if (knockoutLoss) {
+    const opponent = opponentFor(knockoutLoss, teamId);
+    return {
+      kind: "eliminated",
+      title: eliminationStageTitles[knockoutLoss.stage] ?? `Røk ut i ${matchStageLabel(knockoutLoss.stage).toLowerCase()}`,
+      detail: `Tapte ${resultLabel(knockoutLoss, teamId)}${opponent ? ` mot ${teamName(opponent)}` : ""}.`,
+      match: knockoutLoss,
+      opponent
+    };
+  }
+
+  const final = teamMatches.find((match) => match.stage === "Final" && match.status === "finished");
+  if (final && !teamLost(final, teamId)) {
+    return { kind: "champion", title: "Verdensmester", detail: "Vant VM-finalen.", match: final, opponent: opponentFor(final, teamId) };
+  }
+
+  const groupMatches = teamMatches.filter((match) => match.group_name);
+  const groupIsComplete = groupMatches.length >= 3 && groupMatches.every((match) => match.status === "finished");
+  const qualifiedForKnockout = teamMatches.some((match) => match.stage === "Round of 32");
+  if (groupIsComplete && !qualifiedForKnockout) {
+    const lastGroupMatch = groupMatches[groupMatches.length - 1];
+    const opponent = opponentFor(lastGroupMatch, teamId);
+    return {
+      kind: "eliminated",
+      title: "Røk ut i gruppespillet",
+      detail: opponent ? `Siste gruppekamp var mot ${teamName(opponent)}.` : "Ble slått ut etter gruppespillet.",
+      match: lastGroupMatch,
+      opponent
+    };
+  }
+
+  if (qualifiedForKnockout) {
+    const nextMatch = teamMatches.find((match) => match.status !== "finished");
+    const opponent = nextMatch ? opponentFor(nextMatch, teamId) : undefined;
+    return {
+      kind: "active",
+      title: "Fortsatt med i turneringen",
+      detail: nextMatch
+        ? `Neste kamp${opponent ? ` er mot ${teamName(opponent)}` : ""}: ${matchStageLabel(nextMatch.stage)}.`
+        : "Venter på at neste utslagskamp skal bli avgjort.",
+      match: nextMatch,
+      opponent
+    };
+  }
+
+  return {
+    kind: "pending",
+    title: "Turneringsstatus ikke avgjort",
+    detail: "Status oppdateres når kampresultatene er bekreftet."
+  };
 }

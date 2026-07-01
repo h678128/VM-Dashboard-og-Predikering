@@ -122,7 +122,15 @@ def test_live_import_preserves_unresolved_schedule_slots(tmp_path):
                 "status": "finished",
                 "home_score": 3,
                 "away_score": 2,
-            }
+            },
+            {
+                "id": 10078,
+                "stage": "Round of 32",
+                "home_team_id": 35,
+                "away_team_id": 1,
+                "kickoff_at": "2026-06-30T17:00:00+00:00",
+                "status": "scheduled",
+            },
         ]
     }
 
@@ -139,6 +147,11 @@ def test_live_import_preserves_unresolved_schedule_slots(tmp_path):
 
     assert len(saved["matches"]) == 104
     assert any(match.get("match_number") == 104 for match in saved["matches"])
+    verified = next(match for match in saved["matches"] if match.get("match_number") == 78)
+    assert verified["group_name"] is None
+    assert verified["status"] == "finished"
+    assert (verified["home_score"], verified["away_score"]) == (1, 2)
+    assert saved["metadata"]["verification_sources"][0]["match_number"] == 78
     assert "komplette terminlisten" in saved["metadata"]["notes"][0]
 
 

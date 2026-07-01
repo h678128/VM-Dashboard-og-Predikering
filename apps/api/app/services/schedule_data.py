@@ -27,6 +27,7 @@ def refresh_schedule_data(force: bool = False) -> dict[str, Any]:
         MATCHES,
         source_name=source.label,
         source_url=source.url,
+        preserve_existing=True,
     )
     return {
         "status": "updated" if result["status"] == "fetched" else result["status"],

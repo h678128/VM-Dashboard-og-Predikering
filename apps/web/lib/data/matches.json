@@ -8,11 +8,20 @@
     "timezone": "Europe/Oslo",
     "is_live_data": false,
     "skipped_unresolved_matches": 0,
-    "unresolved_participants": 31,
+    "unresolved_participants": 29,
     "notes": [
       "OpenFootball CC0-snapshot med komplett terminliste.",
       "Resultater oppdateres periodisk og er ikke sekund-for-sekund live.",
-      "FIFA er autoritativ kilde ved eventuelle avvik."
+      "FIFA er autoritativ kilde ved eventuelle avvik.",
+      "Kamp 78 er resultatverifisert separat mens OpenFootball-snapshotet oppdateres."
+    ],
+    "verification_sources": [
+      {
+        "match_number": 78,
+        "source_name": "Sky Sports",
+        "source_url": "https://www.skysports.com/football/ivory-coast-vs-norway/report/549843",
+        "verified_at": "2026-07-01"
+      }
     ]
   },
   "matches": [
@@ -1473,9 +1482,9 @@
       "kickoff_at": "2026-06-30T17:00:00+00:00",
       "stadium": "Dallas (Arlington)",
       "city": "Dallas (Arlington)",
-      "status": "scheduled",
-      "home_score": null,
-      "away_score": null,
+      "status": "finished",
+      "home_score": 1,
+      "away_score": 2,
       "home_penalty_score": null,
       "away_penalty_score": null
     },
@@ -1732,10 +1741,10 @@
       "tournament_year": 2026,
       "stage": "Round of 16",
       "group_name": null,
-      "home_team_id": null,
-      "away_team_id": null,
-      "home_team_label": "Vinner kamp 76",
-      "away_team_label": "Vinner kamp 78",
+      "home_team_id": 25,
+      "away_team_id": 1,
+      "home_team_label": null,
+      "away_team_label": null,
       "kickoff_at": "2026-07-05T20:00:00+00:00",
       "stadium": "New York/New Jersey (East Rutherford)",
       "city": "New York/New Jersey (East Rutherford)",
